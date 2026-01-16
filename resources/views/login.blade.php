@@ -28,7 +28,7 @@
             overflow: hidden;
         }
 
-        /* Dekorasi Background Emas Halus */
+        /* Partikel Emas */
         .gold-particle {
             position: absolute;
             background: radial-gradient(circle, var(--soft-gold) 0%, transparent 70%);
@@ -44,12 +44,12 @@
             100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Container Utama */
+        /* Card Login */
         .login-card {
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             padding: 50px 40px;
-            border-radius: 4px; /* Sudut tajam/sedikit membulat lebih terkesan mewah */
+            border-radius: 4px;
             width: 100%;
             max-width: 400px;
             text-align: center;
@@ -59,7 +59,6 @@
             z-index: 10;
         }
 
-        /* Aksen Ornamen di Pojok (Luxury Touch) */
         .login-card::before, .login-card::after {
             content: "";
             position: absolute;
@@ -117,7 +116,6 @@
             border-bottom: 1px solid var(--primary-gold);
         }
 
-        /* Tombol Pro */
         .btn-login {
             width: 100%;
             padding: 15px;
@@ -154,7 +152,6 @@
             color: var(--primary-gold);
         }
 
-        /* Animasi kilauan saat mengetik (halus) */
         .glow-hint {
             position: absolute;
             font-size: 10px;
@@ -177,15 +174,15 @@
         <h1>Login</h1>
         <p class="subtitle">LIVE KITCHEN EXPERIENCE</p>
         
-        <form action="#">
+        <form id="loginForm">
             <div class="input-group">
                 <label>Username</label>
-                <input type="text" placeholder="Your refined identity" required onkeypress="createSparkle(event)">
+                <input type="text" id="username" placeholder="" required onkeypress="createSparkle(event)">
             </div>
             
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" placeholder="••••••••" required>
+                <input type="password" id="password" placeholder="" required>
             </div>
 
             <button type="submit" class="btn-login">Sign In</button>
@@ -199,7 +196,7 @@
     </div>
 
     <script>
-        // Membuat partikel emas yang melayang di background
+        // 1. Partikel Emas
         function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 20; i++) {
@@ -216,7 +213,7 @@
             }
         }
 
-        // Efek kilauan emas tipis saat mengetik (pengganti emoji makanan agar lebih pro)
+        // 2. Efek Sparkle saat ngetik
         function createSparkle(e) {
             const hint = document.createElement('div');
             hint.className = 'glow-hint';
@@ -226,6 +223,20 @@
             document.body.appendChild(hint);
             setTimeout(() => hint.remove(), 1000);
         }
+
+        // 3. LOGIKA LOGIN (Sesuai permintaan tetap pakai salsa & 123)
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (user === 'salsa' && pass === '123') {
+                window.location.href = '/dashboard'; 
+            } else {
+                alert('Maaf sandi kamu salah');
+            }
+        });
 
         window.onload = createParticles;
     </script>
