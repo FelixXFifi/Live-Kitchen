@@ -2,12 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Halaman depan langsung nampilin Login
+// Halaman utama (Login)
 Route::get('/', function () {
     return view('login');
 });
 
-// Daftarin alamat Dashboard biar bisa dibuka
+// Jalur untuk Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard');
+});
+
+// Jalur untuk Manajemen Menu
+Route::get('/manajemen-menu', function () {
+    return view('manajemen-menu');
+});

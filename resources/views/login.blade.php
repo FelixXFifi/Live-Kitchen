@@ -28,7 +28,8 @@
             overflow: hidden;
         }
 
-        /* Dekorasi Background Emas Halus */
+        /* Background Particles */
+        #particles { position: absolute; width: 100%; height: 100%; z-index: 1; }
         .gold-particle {
             position: absolute;
             background: radial-gradient(circle, var(--soft-gold) 0%, transparent 70%);
@@ -49,8 +50,8 @@
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             padding: 50px 40px;
-            border-radius: 4px; /* Sudut tajam/sedikit membulat lebih terkesan mewah */
-            width: 100%;
+            border-radius: 4px;
+            width: 90%;
             max-width: 400px;
             text-align: center;
             border: 1px solid rgba(197, 160, 89, 0.3);
@@ -59,7 +60,7 @@
             z-index: 10;
         }
 
-        /* Aksen Ornamen di Pojok (Luxury Touch) */
+        /* Ornamen Mewah di Pojok */
         .login-card::before, .login-card::after {
             content: "";
             position: absolute;
@@ -74,26 +75,23 @@
             font-family: 'Playfair Display', serif;
             color: var(--primary-gold);
             font-size: 2.2rem;
-            margin-bottom: 10px;
+            margin: 0 0 5px 0;
             letter-spacing: 3px;
             text-transform: uppercase;
         }
 
-        p.subtitle {
+        .subtitle {
             color: #ccc;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             margin-bottom: 40px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .input-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
+        .input-group { margin-bottom: 25px; text-align: left; }
         .input-group label {
             color: var(--primary-gold);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             display: block;
@@ -111,13 +109,11 @@
             font-size: 1rem;
             transition: 0.3s;
             outline: none;
+            box-sizing: border-box;
         }
 
-        .input-group input:focus {
-            border-bottom: 1px solid var(--primary-gold);
-        }
+        .input-group input:focus { border-bottom: 1px solid var(--primary-gold); }
 
-        /* Tombol Pro */
         .btn-login {
             width: 100%;
             padding: 15px;
@@ -129,7 +125,7 @@
             letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.4s;
-            margin-top: 20px;
+            margin-top: 10px;
             font-family: 'Poppins', sans-serif;
         }
 
@@ -139,33 +135,22 @@
             box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2);
         }
 
-        .footer-links {
-            margin-top: 30px;
-            font-size: 0.8rem;
-        }
+        .footer-links { margin-top: 30px; font-size: 0.8rem; }
+        .footer-links a { color: #999; text-decoration: none; transition: 0.3s; }
+        .footer-links a:hover { color: var(--primary-gold); }
 
-        .footer-links a {
-            color: #999;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-gold);
-        }
-
-        /* Animasi kilauan saat mengetik (halus) */
+        /* Efek Kilauan */
         .glow-hint {
             position: absolute;
-            font-size: 10px;
-            color: var(--soft-gold);
+            font-size: 12px;
             pointer-events: none;
             animation: fadeUp 1s forwards;
+            z-index: 100;
         }
 
         @keyframes fadeUp {
             from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 0; transform: translateY(-30px); }
         }
     </style>
 </head>
@@ -175,17 +160,17 @@
 
     <div class="login-card">
         <h1>Login</h1>
-        <p class="subtitle">LIVE KITCHEN EXPERIENCE</p>
+        <p class="subtitle">Live Kitchen Experience</p>
         
-        <form action="#">
+        <form id="loginForm">
             <div class="input-group">
-                <label>Username</label>
-                <input type="text" placeholder="Your refined identity" required onkeypress="createSparkle(event)">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Your identity" required onkeypress="createSparkle(event)">
             </div>
             
             <div class="input-group">
-                <label>Password</label>
-                <input type="password" placeholder="••••••••" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
             </div>
 
             <button type="submit" class="btn-login">Sign In</button>
@@ -199,7 +184,7 @@
     </div>
 
     <script>
-        // Membuat partikel emas yang melayang di background
+        // Efek Partikel Background
         function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 20; i++) {
@@ -216,7 +201,7 @@
             }
         }
 
-        // Efek kilauan emas tipis saat mengetik (pengganti emoji makanan agar lebih pro)
+        // Efek Sparkle saat mengetik
         function createSparkle(e) {
             const hint = document.createElement('div');
             hint.className = 'glow-hint';
@@ -226,6 +211,22 @@
             document.body.appendChild(hint);
             setTimeout(() => hint.remove(), 1000);
         }
+
+        // LOGIKA LOGIN KHUSUS
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+
+            const userIn = document.getElementById('username').value;
+            const passIn = document.getElementById('password').value;
+
+            // Pengecekan Kredensial salsabilla & 2007
+            if (userIn === "salsabilla" && passIn === "2007") {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert("Akses ditolak. Silakan periksa kembali username dan password Anda.");
+                document.getElementById('password').value = ""; // Reset password box
+            }
+        });
 
         window.onload = createParticles;
     </script>

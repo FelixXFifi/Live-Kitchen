@@ -3,207 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Dashboard | Live Kitchen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Dashboard | Live Kitchen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gold: #c5a059;
-            --dark-navy: #0f1c2e;
-            --deep-navy: #08121f;
-            --soft-gold: #e2c275;
+            --primary-navy: #1a3c4a;
+            --bg-light: #d8e2eb;
+            --gold-accent: #c5b081;
+            --white: #ffffff;
+            --transition: all 0.3s ease;
         }
 
         body {
             margin: 0;
-            padding: 0;
-            background-color: var(--deep-navy);
             font-family: 'Poppins', sans-serif;
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
+            background-color: var(--bg-light);
+            color: #333;
         }
 
-        /* Container Partikel Emas */
-        #particles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0;
-        }
-
-        .gold-particle {
-            position: absolute;
-            background: radial-gradient(circle, var(--soft-gold) 0%, transparent 70%);
-            border-radius: 50%;
-            opacity: 0.4;
-            animation: float-up 12s infinite linear;
-        }
-
-        @keyframes float-up {
-            0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-
-        /* Navbar */
-        nav {
-            background: var(--dark-navy);
-            padding: 15px 40px;
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: var(--primary-navy);
+            padding: 15px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--primary-gold);
-            position: relative;
-            z-index: 10;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .logo {
+        .navbar h1 {
+            color: var(--gold-accent);
             font-family: 'Playfair Display', serif;
-            color: var(--primary-gold);
             font-size: 1.5rem;
             letter-spacing: 2px;
+            margin: 0;
             text-transform: uppercase;
         }
 
-        .btn-logout {
-            background: var(--primary-gold);
-            color: var(--dark-navy);
-            padding: 8px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.8rem;
-            transition: 0.3s;
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
         }
 
-        /* Main Content */
-        .container {
+        .nav-links a {
+            color: #d1d1d1;
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover { color: var(--gold-accent); }
+        .nav-links a.active { color: var(--gold-accent); font-weight: 600; }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            padding-left: 20px;
+        }
+
+        .logout-btn {
+            color: #ff6b6b;
+            font-size: 0.75rem;
+            text-decoration: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .profile-circle {
+            width: 35px;
+            height: 35px;
+            background-color: var(--gold-accent);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: var(--primary-navy);
+        }
+
+        /* --- HERO BANNER --- */
+        .hero-banner {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
             position: relative;
-            z-index: 5;
-            padding: 50px 20px;
-            max-width: 1100px;
+        }
+
+        .hero-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 60px;
+            transform: translateY(-50%);
+            color: white;
+        }
+
+        .hero-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin: 0;
+            color: var(--gold-accent);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .container {
+            padding: 40px 60px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
+        /* --- STATS CARDS --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 25px;
+            margin-bottom: 50px;
         }
 
-        /* Card Mewah */
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 35px;
-            border-radius: 12px;
-            border: 1px solid rgba(197, 160, 89, 0.3);
+        .stat-card {
+            background: var(--white);
+            padding: 25px;
             text-align: center;
-            transition: 0.4s;
             position: relative;
+            box-shadow: 8px 8px 0px rgba(26, 60, 74, 0.1);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary-gold);
-            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.2);
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 0px rgba(197, 176, 129, 0.2);
         }
 
-        /* Aksen Siku Emas */
-        .card::before {
+        .stat-card::before {
             content: "";
             position: absolute;
-            top: 10px; left: 10px;
-            width: 20px; height: 20px;
-            border-top: 2px solid var(--primary-gold);
-            border-left: 2px solid var(--primary-gold);
+            top: 10px;
+            left: 10px;
+            width: 25px;
+            height: 25px;
+            border-top: 3px solid var(--gold-accent);
+            border-left: 3px solid var(--gold-accent);
         }
 
-        .card h3 {
-            color: var(--soft-gold);
-            font-size: 0.9rem;
-            letter-spacing: 2px;
+        .stat-card h3 {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 10px 0;
+            color: #666;
             text-transform: uppercase;
-            margin: 0;
+            letter-spacing: 1px;
         }
 
-        .card .value {
-            font-size: 3.5rem;
-            font-weight: 700;
-            display: block;
-            margin-top: 15px;
-            text-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
-        }
-
-        .status-badge {
-            color: #10b981;
-            font-size: 1.3rem;
+        .stat-card p {
+            font-size: 2.2rem;
             font-weight: 600;
-            margin-top: 15px;
+            margin: 0;
+            color: var(--primary-navy);
+        }
+
+        /* --- QUICK ACTION --- */
+        .quick-action-card {
+            background: var(--white);
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 8px 8px 0px rgba(26, 60, 74, 0.1);
+            border-left: 5px solid var(--gold-accent);
+        }
+
+        .quick-action-card h2 {
+            margin: 0 0 10px 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary-navy);
+        }
+
+        .quick-action-card p {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .btn-add-menu {
+            background-color: var(--gold-accent);
+            color: var(--primary-navy);
+            border: none;
+            padding: 14px 30px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
         }
 
-        .dot {
-            width: 12px; height: 12px;
-            background: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #10b981;
+        .btn-add-menu:hover {
+            background-color: var(--primary-navy);
+            color: var(--gold-accent);
+            transform: scale(1.02);
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, var(--gold-accent), transparent);
+            margin-top: 60px;
+            opacity: 0.5;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: var(--primary-navy);
+            padding: 30px 60px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 60px;
         }
     </style>
 </head>
 <body>
 
-    <div id="particles"></div>
+    <nav class="navbar">
+        <h1>Live Kitchen</h1>
+        
+        <div class="nav-links">
+            <div class="nav-links">
+         <a href="/dashboard" class="active">Dashboard</a> 
+         <a href="/manajemen-menu">Menu</a>               
+          <a href="#">Pesanan</a>
+</div></a>
+        </div>
 
-    <nav>
-        <div class="logo">Live Kitchen</div>
-        <div class="user-info" style="display: flex; align-items: center; gap: 20px;">
-            <span style="color: var(--soft-gold); font-size: 0.9rem;">Halo, Salsabilla</span>
-            <a href="/" class="btn-logout">KELUAR</a>
+        <div class="profile-section">
+            <a href="index.html" class="logout-btn">Logout</a>
+            <div class="profile-circle">S</div>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="stats-grid">
-            <div class="card">
-                <h3>Total Pesanan</h3>
-                <span class="value">24</span>
-            </div>
-
-            <div class="card">
-                <h3>Menu Tersedia</h3>
-                <span class="value">12</span>
-            </div>
-
-            <div class="card">
-                <h3>Status Kantin</h3>
-                <div class="status-badge">
-                    <div class="dot"></div> BUKA
-                </div>
-            </div>
+    <div class="hero-banner">
+        <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1920&q=80" alt="Kitchen Banner">
+        <div class="hero-text">
+            <h2>Welcome Back, Salsabilla</h2>
+            <p>Kelola dapur mewahmu hari ini.</p>
         </div>
     </div>
 
-    <script>
-        // Fungsi buat butiran emas melayang
-        function createGoldDust() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 40; i++) {
-                const p = document.createElement('div');
-                p.className = 'gold-particle';
-                const size = Math.random() * 4 + 2 + 'px';
-                p.style.width = size;
-                p.style.height = size;
-                p.style.left = Math.random() * 100 + 'vw';
-                p.style.animationDuration = (Math.random() * 10 + 8) + 's';
-                p.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(p);
-            }
-        }
-        // Pastikan dijalankan setelah halaman siap
-        window.addEventListener('DOMContentLoaded', createGoldDust);
-    </script>
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Jumlah menu:</h3>
+                <p>24</p>
+            </div>
+            <div class="stat-card">
+                <h3>Menu Kosong:</h3>
+                <p>3</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Pesanan:</h3>
+                <p>12</p>
+            </div>
+            <div class="stat-card">
+                <h3>Status Site:</h3>
+                <p style="font-size: 1.5rem; color: #2ecc71;">ONLINE</p>
+            </div>
+        </div>
+
+        <div class="quick-action-card">
+            <h2>Quick Action</h2>
+            <p>Ingin menambah menu spesial baru untuk pelanggan?</p>
+            <button class="btn-add-menu" onclick="alert('Fitur Tambah Menu segera hadir!')">
+                <span style="font-size: 1.4rem; font-weight: bold;">+</span> Tambahkan ke menu
+            </button>
+        </div>
+
+        <div class="divider"></div>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 Luxury Live Kitchen Experience Admin Panel
+    </div>
+
 </body>
 </html>
