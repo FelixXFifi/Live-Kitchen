@@ -37,6 +37,30 @@
             padding: 40px 20px;
         }
 
+        .back-button {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: var(--card-blue);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        .back-button:hover {
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+            transform: scale(1.1);
+        }
+
         /* OUTER FRAME (Kotak di belakang) */
         .outer-frame {
             background-color: #0c161b;
@@ -181,9 +205,48 @@
             background: var(--card-blue); padding: 40px; border: 2px solid var(--accent-gold);
             text-align: center; border-radius: 2px; max-width: 400px;
         }
+
+        .modal-btns {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        /* --- BAGIAN YANG ANDA MINTA: TOMBOL MODAL KEMBAR & MENYALA --- */
+        .btn-modal-action {
+            flex: 1;
+            padding: 12px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--accent-gold);
+            border: 2px solid var(--accent-gold);
+        }
+
+        /* Efek menyala saat kursor di atas tombol (Hover) */
+        .btn-modal-action:hover {
+            background: rgba(226, 194, 117, 0.2);
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        /* Efek menyala PUTIH saat tombol dipilih (Active/Selected) */
+        .btn-modal-action.selected {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-color: #ffffff !important;
+            box-shadow: 0 0 15px #ffffff;
+        }
     </style>
 </head>
 <body>
+
+<a href="javascript:history.back()" class="back-button" title="Kembali">
+    <i class="fas fa-arrow-left"></i>
+</a>
 
 <div class="outer-frame">
     <div class="reservation-container">
@@ -276,6 +339,18 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+        <i class="fas fa-question-circle" style="font-size: 3.5rem; color: var(--accent-gold); margin-bottom: 15px;"></i>
+        <h3 style="color: var(--accent-gold); font-family: 'Playfair Display';">Konfirmasi Pesanan</h3>
+        <p style="margin: 15px 0; line-height: 1.5;">Apakah Anda yakin dengan detail pesanan Anda? Pastikan tanggal dan aktivitas sudah sesuai.</p>
+        <div class="modal-btns">
+            <button type="button" class="btn-modal-action" id="btnCancelConfirm">Batal</button>
+            <button type="button" class="btn-modal-action" id="btnFinalSubmit">Ya, Saya Yakin</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="successModal">
     <div class="modal">
         <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--accent-gold); margin-bottom: 20px;"></i>
@@ -304,8 +379,11 @@
     const modal = document.getElementById("successModal");
     const submitBtn = document.getElementById("submitBtn");
     const activitiesDataInput = document.getElementById("activitiesDataInput");
+    const confirmModal = document.getElementById("confirmModal");
+    const btnCancelConfirm = document.getElementById("btnCancelConfirm");
+    const btnFinalSubmit = document.getElementById("btnFinalSubmit");
 
-    // FUNGSI ADD ACTIVITY
+    // FUNGSI ADD ACTIVITY (KODE ASLI ANDA)
     btnAdd.addEventListener("click", () => {
         const price = parseInt(activitySelect.value);
         const nameText = activitySelect.options[activitySelect.selectedIndex].text;
@@ -357,7 +435,13 @@
         document.getElementById("activitiesDataInput").value = JSON.stringify(state.activities);
     }
 
-    // FUNGSI SUBMIT DENGAN VALIDASI LARAVEL
+    // --- LOGIKA TOMBOL MODAL MENYALA ---
+    function clearButtonSelection() {
+        btnCancelConfirm.classList.remove("selected");
+        btnFinalSubmit.classList.remove("selected");
+    }
+
+    // FUNGSI SUBMIT (KODE ASLI ANDA + MODAL)
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -365,10 +449,28 @@
             alert("Mohon tambahkan minimal satu aktivitas.");
             return;
         }
+        
+        clearButtonSelection();
+        confirmModal.classList.add("active");
+    });
 
-        // Reset UI
+    // Event Batal
+    btnCancelConfirm.addEventListener("click", () => {
+        clearButtonSelection();
+        btnCancelConfirm.classList.add("selected"); // Menyala putih saat diklik
+        setTimeout(() => {
+            confirmModal.classList.remove("active");
+        }, 150);
+    });
+
+    // Event Ya, Saya Yakin (KODE ASLI ANDA)
+    btnFinalSubmit.addEventListener("click", async () => {
+        clearButtonSelection();
+        btnFinalSubmit.classList.add("selected"); // Menyala putih saat diklik
+
         submitBtn.innerText = "Memproses...";
         submitBtn.disabled = true;
+        
         document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
         document.querySelectorAll('input, select').forEach(el => el.classList.remove('input-error'));
 
@@ -377,18 +479,24 @@
             const response = await fetch(STORE_URL, {
                 method: 'POST',
                 body: formData,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                headers: { 
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value 
+                }
             });
 
             const result = await response.json();
 
             if (!response.ok) {
+                // Jika error, tutup modal konfirmasi agar user bisa perbaiki form
+                confirmModal.classList.remove("active");
                 if (result.errors) {
                     for (const [field, messages] of Object.entries(result.errors)) {
                         const input = document.querySelector(`[name="${field}"]`);
                         if (input) {
                             input.classList.add('input-error');
-                            const errDiv = input.parentElement.querySelector('.error-msg') || input.closest('.form-group-card').querySelector('.error-msg');
+                            const errDiv = input.parentElement.querySelector('.error-msg') || 
+                                          input.closest('.form-group-card').querySelector('.error-msg');
                             if (errDiv) {
                                 errDiv.innerText = messages[0];
                                 errDiv.style.display = 'block';
@@ -397,8 +505,11 @@
                     }
                 }
             } else {
+                confirmModal.classList.remove("active");
                 document.getElementById("successModal").classList.add("active");
                 form.reset();
+                state.activities = []; 
+                renderActivities(); 
             }
         } catch (error) {
             alert("Gagal mengirim data.");
