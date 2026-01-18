@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Preferences & Reservation Details</title>
+        <!-- Google Fonts -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Icon Library -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+
+        <style>
+            :root {
+                /* Color Palette based on Dark Blue Theme */
+                --bg-color: #0f172a; /* Dark Slate Blue */
+                --card-bg: #1e293b; /* Slightly lighter blue */
+                --input-bg: #334155;
+                --primary-color: #3b82f6; /* Bright Blue accent */
+                --primary-hover: #2563eb;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #475569;
+                --danger-color: #ef4444;
+                --success-color: #10b981;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: "Inter", sans-serif;
+                background-color: var(--bg-color);
+                background-image: radial-gradient(
+                    circle at top right,
+                    #1e3a8a 0%,
+                    #0f172a 100%
+                );
+                color: var(--text-main);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            /* Container */
+            .reservation-container {
+                width: 100%;
+                max-width: 500px;
+                background-color: var(--card-bg);
+                border-radius: 16px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+                padding: 30px;
+                border: 1px solid var(--border-color);
+                animation: fadeIn 0.5s ease-out;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Header */
+            .header {
+                margin-bottom: 25px;
+                text-align: center;
+            }
+
+            .header h2 {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 5px;
+                color: var(--text-main);
+            }
+
+            .header p {
+                color: var(--text-muted);
+                font-size: 0.9rem;
+            }
+
+            /* Form Elements */
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="time"],
+            input[type="number"],
+            select {
+                width: 100%;
+                padding: 12px 15px;
+                background-color: var(--input-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                color: var(--text-main);
+                font-family: inherit;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+            }
+
+            input:focus,
+            select:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            }
+
+            /* Date & Time Row */
+            .row-group {
+                display: flex;
+                gap: 15px;
+            }
+
+            .col {
+                flex: 1;
+            }
+
+            /* Activities Section */
+            .activities-section {
+                background-color: rgba(15, 23, 42, 0.3);
+                padding: 15px;
+                border-radius: 8px;
+                border: 1px dashed var(--border-color);
+                margin-bottom: 20px;
+            }
+
+            .activity-controls {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 15px;
+                align-items: center;
+            }
+
+            .activity-select {
+                flex: 2;
+            }
+
+            .activity-qty {
+                flex: 1;
+            }
+
+            .btn-add {
+                background-color: var(--input-bg);
+                color: var(--text-main);
+                border: 1px solid var(--border-color);
+                width: 40px;
+                height: 42px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-add:hover {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            /* Activity List */
+            .activity-list {
+                list-style: none;
+                margin-bottom: 15px;
+            }
+
+            .activity-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: var(--input-bg);
+                padding: 10px 12px;
+                border-radius: 6px;
+                margin-bottom: 8px;
+                font-size: 0.9rem;
+                animation: slideIn 0.3s ease;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .item-info {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .item-name {
+                font-weight: 500;
+                color: var(--text-main);
+            }
+
+            .item-detail {
+                font-size: 0.8rem;
+                color: var(--text-muted);
+            }
+
+            .btn-remove {
+                color: var(--danger-color);
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 5px;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .btn-remove:hover {
+                opacity: 1;
+            }
+
+            .total-section {
+                border-top: 1px solid var(--border-color);
+                padding-top: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            .total-price {
+                color: var(--primary-color);
+                font-size: 1.3rem;
+            }
+
+            /* Submit Button */
+            .btn-submit {
+                width: 100%;
+                padding: 14px;
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.1s;
+                margin-top: 10px;
+            }
+
+            .btn-submit:hover {
+                background-color: var(--primary-hover);
+            }
+
+            .btn-submit:active {
+                transform: scale(0.98);
+            }
+
+            /* Modal / Toast Notification */
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s;
+            }
+
+            .modal-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .modal {
+                background-color: var(--card-bg);
+                padding: 30px;
+                border-radius: 12px;
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+                transform: scale(0.8);
+                transition: transform 0.3s;
+                border: 1px solid var(--border-color);
+            }
+
+            .modal-overlay.active .modal {
+                transform: scale(1);
+            }
+
+            .success-icon {
+                color: var(--success-color);
+                font-size: 3rem;
+                margin-bottom: 15px;
+            }
+
+            .modal h3 {
+                margin-bottom: 10px;
+            }
+
+            .modal p {
+                color: var(--text-muted);
+                margin-bottom: 20px;
+                font-size: 0.9rem;
+            }
+
+            .btn-modal {
+                background-color: var(--input-bg);
+                color: var(--text-main);
+                padding: 10px 20px;
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                cursor: pointer;
+            }
+
+            .btn-modal:hover {
+                background-color: var(--border-color);
+            }
+
+            /* Helper for validation */
+            .error-msg {
+                color: var(--danger-color);
+                font-size: 0.75rem;
+                margin-top: 5px;
+                display: none;
+            }
+
+            .input-error {
+                border-color: var(--danger-color) !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="reservation-container">
+            <header class="header">
+                <h2>Preferences & Reservation</h2>
+                <p>Lengkapi detail di bawah ini untuk memesan.</p>
+            </header>
+
+            <form id="reservationForm" novalidate>
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name">Name under reservation:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Masukkan nama lengkap"
+                        required
+                    />
+                    <div class="error-msg">Nama wajib diisi.</div>
+                </div>
+
+                <!-- Date & Time -->
+                <div class="row-group form-group">
+                    <div class="col">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required />
+                        <div class="error-msg">Pilih tanggal.</div>
+                    </div>
+                    <div class="col">
+                        <label for="time">Time</label>
+                        <input type="time" id="time" required />
+                        <div class="error-msg">Pilih waktu.</div>
+                    </div>
+                </div>
+
+                <!-- Occasion -->
+                <div class="form-group">
+                    <label for="occasion">Occasion Type:</label>
+                    <select id="occasion" required>
+                        <option value="" disabled selected>
+                            Pilih jenis acara
+                        </option>
+                        <option value="birthday">Birthday</option>
+                        <option value="anniversary">Anniversary</option>
+                        <option value="business">Business Meeting</option>
+                        <option value="casual">Casual Dining</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div class="error-msg">Pilih jenis acara.</div>
+                </div>
+
+                <!-- Location -->
+                <div class="form-group">
+                    <label for="location">Event Location:</label>
+                    <input
+                        type="text"
+                        id="location"
+                        placeholder="Contoh: Main Hall, Private Room A"
+                        required
+                    />
+                    <div class="error-msg">Lokasi wajib diisi.</div>
+                </div>
+
+                <!-- Activities Section -->
+                <div class="form-group">
+                    <label>Activities:</label>
+                    <div class="activities-section">
+                        <!-- Control to add activity -->
+                        <div class="activity-controls">
+                            <select id="activitySelect" class="activity-select">
+                                <option value="0" disabled selected>
+                                    Pilih Aktivitas
+                                </option>
+                                <option value="500000">
+                                    Dinner Package - Rp 500.000
+                                </option>
+                                <option value="150000">
+                                    Live Music - Rp 150.000
+                                </option>
+                                <option value="75000">
+                                    Decoration - Rp 75.000
+                                </option>
+                                <option value="300000">
+                                    Private Room - Rp 300.000
+                                </option>
+                                <option value="100000">
+                                    Buffet Extra - Rp 100.000
+                                </option>
+                            </select>
+                            <input
+                                type="number"
+                                id="activityQty"
+                                class="activity-qty"
+                                placeholder="Qty"
+                                min="1"
+                                value="1"
+                            />
+                            <button
+                                type="button"
+                                class="btn-add"
+                                id="btnAddActivity"
+                            >
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <!-- List of added activities -->
+                        <ul class="activity-list" id="activityList">
+                            <!-- Items will be injected here via JS -->
+                            <li
+                                style="
+                                    text-align: center;
+                                    color: var(--text-muted);
+                                    font-size: 0.85rem;
+                                    font-style: italic;
+                                    padding: 10px;
+                                "
+                                id="emptyMsg"
+                            >
+                                Belum ada aktivitas dipilih.
+                            </li>
+                        </ul>
+
+                        <!-- Total Display -->
+                        <div class="total-section">
+                            <span>Total</span>
+                            <span class="total-price" id="grandTotal"
+                                >Rp 0</span
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    Confirm Reservation
+                </button>
+            </form>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="modal-overlay" id="successModal">
+            <div class="modal">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h3>Reservasi Berhasil!</h3>
+                <p>
+                    Detail reservasi Anda telah kami terima. Kami akan
+                    menghubungi Anda segera untuk konfirmasi akhir.
+                </p>
+                <button class="btn-modal" onclick="closeModal()">Tutup</button>
+            </div>
+        </div>
+
+        <script>
+            // State Management (Simulating Livewire Properties)
+            const state = {
+                activities: [],
+                currencyFormatter: new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0,
+                }),
+            };
+
+            // DOM Elements
+            const btnAdd = document.getElementById("btnAddActivity");
+            const activitySelect = document.getElementById("activitySelect");
+            const activityQty = document.getElementById("activityQty");
+            const activityList = document.getElementById("activityList");
+            const emptyMsg = document.getElementById("emptyMsg");
+            const grandTotalEl = document.getElementById("grandTotal");
+            const form = document.getElementById("reservationForm");
+            const modal = document.getElementById("successModal");
+            const submitBtn = document.getElementById("submitBtn");
+
+            // Event Listeners
+            btnAdd.addEventListener("click", addActivity);
+            form.addEventListener("submit", handleFormSubmit);
+
+            // Function: Add Activity
+            function addActivity() {
+                const price = parseInt(activitySelect.value);
+                const name =
+                    activitySelect.options[activitySelect.selectedIndex].text;
+                const qty = parseInt(activityQty.value);
+
+                // Validation for activity input
+                if (price === 0 || isNaN(price)) {
+                    showToast(
+                        "Silakan pilih aktivitas terlebih dahulu.",
+                        "error"
+                    );
+                    activitySelect.focus();
+                    return;
+                }
+                if (qty < 1 || isNaN(qty)) {
+                    showToast("Jumlah pesanan minimal 1.", "error");
+                    activityQty.focus();
+                    return;
+                }
+
+                // Add to state array
+                // Generate unique ID for handling deletion
+                const id = Date.now();
+                state.activities.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    qty: qty,
+                    total: price * qty,
+                });
+
+                // Reset inputs
+                activitySelect.value = "0";
+                activityQty.value = "1";
+
+                // Update UI
+                renderActivities();
+            }
+
+            // Function: Remove Activity
+            function removeActivity(id) {
+                state.activities = state.activities.filter(
+                    (item) => item.id !== id
+                );
+                renderActivities();
+            }
+
+            // Function: Render Activities & Calculate Total
+            function renderActivities() {
+                // Clear list except empty message
+                activityList.innerHTML = "";
+
+                let currentTotal = 0;
+
+                if (state.activities.length === 0) {
+                    activityList.appendChild(emptyMsg);
+                    emptyMsg.style.display = "block";
+                } else {
+                    emptyMsg.style.display = "none"; // Make sure it's gone
+
+                    state.activities.forEach((item) => {
+                        currentTotal += item.total;
+
+                        const li = document.createElement("li");
+                        li.className = "activity-item";
+                        li.innerHTML = `
+                        <div class="item-info">
+                            <span class="item-name">${
+                                item.name.split("-")[0]
+                            }</span>
+                            <span class="item-detail">${
+                                item.qty
+                            } x ${state.currencyFormatter.format(
+                            item.price
+                        )}</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="font-weight:600;">${state.currencyFormatter.format(
+                                item.total
+                            )}</span>
+                            <button type="button" class="btn-remove" onclick="removeActivity(${
+                                item.id
+                            })">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                        activityList.appendChild(li);
+                    });
+                }
+
+                // Update Grand Total Text
+                grandTotalEl.textContent =
+                    state.currencyFormatter.format(currentTotal);
+            }
+
+            // Function: Handle Form Submit
+            function handleFormSubmit(e) {
+                e.preventDefault();
+
+                // Simple Validation
+                let isValid = true;
+                const requiredInputs = form.querySelectorAll("[required]");
+
+                requiredInputs.forEach((input) => {
+                    const errorMsg = input.nextElementSibling; // Assuming .error-msg is next
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.classList.add("input-error");
+                        if (
+                            errorMsg &&
+                            errorMsg.classList.contains("error-msg")
+                        ) {
+                            errorMsg.style.display = "block";
+                        }
+                    } else {
+                        input.classList.remove("input-error");
+                        if (
+                            errorMsg &&
+                            errorMsg.classList.contains("error-msg")
+                        ) {
+                            errorMsg.style.display = "none";
+                        }
+                    }
+                });
+
+                // Check if at least one activity exists (Optional rule, but good for logic)
+                if (state.activities.length === 0) {
+                    showToast(
+                        "Mohon tambahkan minimal satu aktivitas.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (isValid) {
+                    // Simulate Loading
+                    const originalBtnText = submitBtn.innerText;
+                    submitBtn.innerText = "Memproses...";
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = "0.7";
+
+                    // Simulate Server Delay
+                    setTimeout(() => {
+                        submitBtn.innerText = originalBtnText;
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = "1";
+
+                        // Show Success Modal
+                        modal.classList.add("active");
+
+                        // Reset Form
+                        form.reset();
+                        state.activities = [];
+                        renderActivities();
+                        // Reset Date styling (required fix for some browsers)
+                        document
+                            .querySelectorAll(".input-error")
+                            .forEach((el) =>
+                                el.classList.remove("input-error")
+                            );
+                    }, 1500);
+                }
+            }
+
+            // Helper: Close Modal
+            function closeModal() {
+                modal.classList.remove("active");
+            }
+
+            // Helper: Simple Toast (Custom Alert replacement)
+            function showToast(message, type) {
+                // Create a temporary toast element
+                const toast = document.createElement("div");
+                toast.style.position = "fixed";
+                toast.style.bottom = "20px";
+                toast.style.left = "50%";
+                toast.style.transform = "translateX(-50%)";
+                toast.style.padding = "10px 20px";
+                toast.style.borderRadius = "30px";
+                toast.style.backgroundColor =
+                    type === "error" ? "#ef4444" : "#10b981";
+                toast.style.color = "white";
+                toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+                toast.style.zIndex = "2000";
+                toast.style.fontSize = "0.9rem";
+                toast.innerText = message;
+
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.transition = "opacity 0.5s";
+                    toast.style.opacity = "0";
+                    setTimeout(() => toast.remove(), 500);
+                }, 3000);
+            }
+        </script>
+    </body>
+</html>
