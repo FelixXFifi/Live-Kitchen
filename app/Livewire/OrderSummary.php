@@ -11,14 +11,16 @@ class OrderSummary extends Component
     public $reservation;
     public $items;
 
- public function mount()
+ // App\Livewire\OrderSummary.php
+
+// OrderSummary.php
+public function mount()
 {
-    // Ambil ID dari session pesanan terakhir
     $resId = session('latest_res_id');
     $this->items = session('latest_items', []);
 
-    // Ambil data database berdasarkan ID tersebut
-    $dbData = $resId ? Reservation::find($resId) : Reservation::latest()->first();
+    // Gunakan find() hanya jika ID tersedia
+    $dbData = $resId ? Reservation::find($resId) : null;
 
     if ($dbData) {
         $this->reservation = [
@@ -28,6 +30,9 @@ class OrderSummary extends Component
             'occasion'     => $dbData->occasion,
             'location'     => $dbData->location,
         ];
+    } else {
+        // Jika tidak ada data, arahkan kembali ke menu/cart
+        return redirect()->route('cart.index');
     }
 }
 

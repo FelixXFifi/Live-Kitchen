@@ -24,39 +24,36 @@ class ReservationController extends Controller
         return view('order-summary-page'); 
     }
 
-    public function store(Request $request){
+    // ReservationController.php
+
+// ReservationController.php
+public function store(Request $request) {
     try {
-            $data = $request->validate([
-                'name'            => 'required|string|max:255',
-                'date'            => 'required|date',
-                'time'            => 'required',
-                'occasion'        => 'required|string',
-                'location'        => 'required|string',
-                'notes'           => 'nullable|string|max:1000',
-                'activities_data' => 'required', 
-            ]);
+        $data = $request->validate([
+            'name'            => 'required|string|max:255',
+            'date'            => 'required|date',
+            'time'            => 'required',
+            'occasion'        => 'required|string', // Pastikan input ini ada di form
+            'location'        => 'required|string',
+            'notes'           => 'nullable|string|max:1000',
+            'activities_data' => 'required', 
+        ]);
 
-            // 1. Simpan ke Database
-            $reservation = Reservation::create($data);
+        // Simpan ke database
+        $reservation = Reservation::create($data);
 
-            // 2. Decode JSON activities agar menjadi array PHP
-            $items = json_decode($request->activities_data, true);
+        // Simpan ke session agar OrderSummary bisa membaca datanya
+        session([
+            'latest_res_id' => $reservation->id,
+            'latest_items'  => json_decode($request->activities_data, true)
+        ]);
 
-            // 3. Simpan ID dan Items ke Session secara spesifik
-            session([
-                'latest_res_id' => $reservation->id,
-                'latest_items'  => $items
-            ]);
-
-            session()->forget('cart');
-
-            return response()->json([
-                'success'      => true,
-                'redirect_url' => route('order.summary')
-            ]);
-
-        } catch (ValidationException $e) {
-            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
-        }
+        return response()->json([
+            'success'      => true,
+            'redirect_url' => route('order.summary')
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
     }
+}
 }

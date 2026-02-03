@@ -18,16 +18,12 @@
                     
                     <div class="w-32 h-24 bg-[#DBE2E9] rounded-sm flex-none overflow-hidden relative shadow-inner">
                          <div class="absolute inset-0 bg-[#345061]/5 group-hover:bg-transparent transition-colors z-10"></div>
-                        
-                        {{-- Logika Gambar: Jika item['image'] ada di array, panggil assetnya --}}
                         @if(!empty($item['image']))
                             <img src="{{ asset('images/' . $item['image']) }}" 
                                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                                  alt="{{ $item['name'] }}"
-                                 loading="lazy"
                                  onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif\'>Culinary<br>Masterpiece</div>'">
                         @else
-                            {{-- Tampilan kalau bener-bener kosong dari array --}}
                             <div class="w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif">
                                 Image Not<br>Curated
                             </div>
@@ -98,7 +94,33 @@
     </div>
     @endif
 
+    <div x-show="showModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+         x-cloak>
+        
+        <div @click.away="showModal = false" class="bg-white p-8 rounded-sm shadow-2xl max-w-sm w-full text-center font-serif border border-[#D4B57F]/20">
+            <h3 class="text-[#345061] text-2xl mb-4 italic font-light">Finalize Selection?</h3>
+            <p class="text-gray-500 text-[10px] mb-8 uppercase tracking-[0.2em] leading-relaxed">You are about to be redirected to our reservation sanctuary.</p>
+            
+            <div class="flex gap-4">
+                <button @click="showModal = false" class="flex-1 py-3 border border-gray-200 text-gray-400 uppercase tracking-widest text-[9px] hover:bg-gray-50 transition-all">
+                    Return
+                </button>
+                <button wire:click="checkout" class="flex-1 py-3 bg-[#345061] text-[#D4B57F] uppercase tracking-widest text-[9px] font-bold hover:bg-[#2A4557] transition-all">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
     <style>
+        [x-cloak] { display: none !important; }
         .custom-scrollbar::-webkit-scrollbar { width: 3px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(52, 80, 97, 0.05); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #D4B57F; }

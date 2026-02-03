@@ -37,21 +37,6 @@
             padding: 40px 20px;
         }
 
-        .back-button {
-            position: fixed;
-            top: 25px;
-            left: 25px;
-            background: var(--card-blue);
-            color: var(--accent-gold);
-            border: 1px solid var(--accent-gold);
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            text-decoration: none;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.3s; z-index: 1001;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-
         .outer-frame {
             background-color: #0c161b;
             padding: 12px;
@@ -103,6 +88,14 @@
             border-radius: 4px;
             background-color: #fff;
             color: #333;
+            font-family: 'Lora', serif;
+        }
+
+        #otherOccasionContainer {
+            margin-top: 15px;
+            display: none;
+            border-top: 1px solid rgba(226, 194, 117, 0.3);
+            padding-top: 15px;
         }
 
         .activity-controls { display: flex; gap: 8px; margin-bottom: 15px; }
@@ -126,7 +119,6 @@
         }
 
         .menu-item { border-left: 3px solid #ffffff; background: rgba(255,255,255,0.1); }
-
         .btn-remove { background: none; border: none; color: var(--danger); cursor: pointer; }
 
         .total-section {
@@ -157,15 +149,15 @@
             z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal { background: var(--card-blue); padding: 40px; border: 2px solid var(--accent-gold); text-align: center; max-width: 400px; }
+        .modal { background: var(--card-blue); padding: 40px; border: 2px solid var(--accent-gold); text-align: center; max-width: 400px; border-radius: 4px; }
         
         .btn-modal-action {
             padding: 12px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;
             background: transparent; color: var(--accent-gold); border: 2px solid var(--accent-gold);
+            transition: 0.2s;
         }
         .btn-modal-action.selected { background-color: #fff; color: #000; border-color: #fff; box-shadow: 0 0 15px #fff; }
 
-        /* LOADING ANIMATION STYLES */
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-dark); display: none; flex-direction: column;
@@ -195,6 +187,8 @@
     <div class="loading-text">Progressing your order...</div>
 </div>
 
+
+
 <div class="outer-frame">
     <div class="reservation-container">
         <header class="header">
@@ -203,14 +197,17 @@
 
         <form id="reservationForm">
             @csrf
+            {{-- Data JSON gabungan (Cart + Additional Services) --}}
             <input type="hidden" name="activities_data" id="activitiesDataInput">
 
             <div class="form-content">
+                {{-- Nama --}}
                 <div class="form-group-card">
                     <label>Name under reservation:</label>
-                    <input type="text" name="name" required />
+                    <input type="text" name="name" placeholder="Enter full name" required />
                 </div>
 
+                {{-- Tanggal & Waktu --}}
                 <div class="form-group-card">
                     <div style="display:flex; gap:10px;">
                         <div style="flex:1;">
@@ -224,9 +221,41 @@
                     </div>
                 </div>
 
+                {{-- Occasion & Location --}}
+                <div class="form-group-card">
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div style="display:flex; gap:10px;">
+                            <div style="flex:1;">
+                                <label>Occasion:</label>
+                                <select name="occasion" id="occasionSelect" required>
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="Dinner">Dinner</option>
+                                    <option value="Birthday">Birthday</option>
+                                    <option value="Anniversary">Anniversary</option>
+                                    <option value="Wedding">Wedding</option>
+                                    <option value="Corporate">Corporate</option>
+                                    <option value="others">Others (Specify below)</option>
+                                </select>
+                            </div>
+                            <div style="flex:1;">
+                                <label>Location:</label>
+                                <input type="text" name="location" placeholder="e.g. Hall A" required />
+                            </div>
+                        </div>
+
+                        {{-- Specify Others --}}
+                        <div id="otherOccasionContainer">
+                            <label>Specify Occasion:</label>
+                            <input type="text" name="other_occasion" id="otherOccasionInput" placeholder="Enter your occasion details...">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- List Orders & Layanan Tambahan --}}
                 <div class="form-group-card">
                     <label>Your Orders & Activities:</label>
                     
+                    {{-- Item dari Cart Database --}}
                     <ul class="activity-list" id="menuDatabaseList">
                         @foreach($cart as $item)
                         <li class="activity-item menu-item">
@@ -241,7 +270,8 @@
 
                     <hr style="border: 0; border-top: 1px dashed rgba(226,194,117,0.3); margin: 15px 0;">
 
-                   <div class="activity-controls">
+                    {{-- Kontrol Layanan Tambahan --}}
+                    <div class="activity-controls">
                         <select id="activitySelect" style="flex: 2;">
                             <option value="0" disabled selected>Tambah Layanan (Opsional)</option>
                             <option value="75000">Decoration - Rp 75.000</option>
@@ -254,8 +284,8 @@
                         <button type="button" class="btn-add" id="btnAddActivity"><i class="fas fa-plus"></i></button>
                     </div>
 
-                    <ul class="activity-list" id="activityList">
-                        </ul>
+                    {{-- List Layanan yang ditambahkan --}}
+                    <ul class="activity-list" id="activityList"></ul>
 
                     <div class="total-section">
                         <span>Grand Total</span>
@@ -263,9 +293,10 @@
                     </div>
                 </div>
 
+                {{-- Notes --}}
                 <div class="form-group-card">
-                    <label>Notes:</label>
-                    <textarea name="notes" rows="2"></textarea>
+                    <label>Special Notes:</label>
+                    <textarea name="notes" rows="2" placeholder="Dietary requirements or special requests..."></textarea>
                 </div>
             </div>
 
@@ -276,13 +307,14 @@
     </div>
 </div>
 
+{{-- MODAL KONFIRMASI --}}
 <div class="modal-overlay" id="confirmModal">
     <div class="modal">
-        <h3>Konfirmasi Pesanan</h3>
-        <p style="margin:15px 0;">Apakah rincian menu dan layanan tambahan sudah benar?</p>
-        <div style="display:flex; gap:10px; justify-content:center;">
-            <button type="button" class="btn-modal-action" id="btnCancelConfirm">Batal</button>
-            <button type="button" class="btn-modal-action" id="btnFinalSubmit">Ya, Yakin</button>
+        <h3 style="color: var(--accent-gold); font-family: 'Playfair Display', serif;">Confirm Reservation</h3>
+        <p style="margin:15px 0; color: #fff; font-size: 0.9rem;">Are you sure the order details and additional services are correct?</p>
+        <div style="display:flex; gap:10px; justify-content:center; margin-top: 20px;">
+            <button type="button" class="btn-modal-action" id="btnCancelConfirm">No, Review</button>
+            <button type="button" class="btn-modal-action" id="btnFinalSubmit">Yes, Confirm</button>
         </div>
     </div>
 </div>
@@ -291,6 +323,7 @@
     const STORE_URL = "{{ route('reservation.store') }}";
     const BASE_MENU_TOTAL = {{ $cartTotal }}; 
     
+    // Ambil data awal dari PHP cart
     const menuDataFromDB = [
         @foreach($cart as $item)
         { name: "{{ $item['name'] }}", price: {{ $item['price'] }}, qty: {{ $item['qty'] }}, total: {{ $item['price'] * $item['qty'] }} },
@@ -302,6 +335,7 @@
         formatter: new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 })
     };
 
+    // Elements
     const btnAdd = document.getElementById("btnAddActivity");
     const activitySelect = document.getElementById("activitySelect");
     const activityQty = document.getElementById("activityQty");
@@ -309,16 +343,37 @@
     const grandTotalEl = document.getElementById("grandTotal");
     const activitiesDataInput = document.getElementById("activitiesDataInput");
     const loadingScreen = document.getElementById("loadingScreen");
+    const occasionSelect = document.getElementById("occasionSelect");
+    const otherOccasionContainer = document.getElementById("otherOccasionContainer");
+    const otherOccasionInput = document.getElementById("otherOccasionInput");
+    const form = document.getElementById("reservationForm");
+    const confirmModal = document.getElementById("confirmModal");
+    const btnCancel = document.getElementById("btnCancelConfirm");
+    const btnFinal = document.getElementById("btnFinalSubmit");
 
+    // --- LOGIKA MUNCULKAN INPUT "OTHERS" ---
+    occasionSelect.addEventListener("change", function() {
+        if (this.value === "others") {
+            otherOccasionContainer.style.display = "block";
+            otherOccasionInput.setAttribute("required", "required");
+            otherOccasionInput.focus();
+        } else {
+            otherOccasionContainer.style.display = "none";
+            otherOccasionInput.removeAttribute("required");
+            otherOccasionInput.value = "";
+        }
+    });
+
+    // Jalankan pertama kali untuk set input hidden awal
     updateHiddenInput();
 
+    // --- LOGIKA LAYANAN TAMBAHAN ---
     btnAdd.addEventListener("click", () => {
         const price = parseInt(activitySelect.value);
         const nameText = activitySelect.options[activitySelect.selectedIndex].text;
         const qty = parseInt(activityQty.value);
-
-        if (price === 0 || isNaN(price)) return alert("Pilih layanan tambahan!");
-
+        if (price === 0 || isNaN(price)) return alert("Please select an additional service!");
+        
         state.activities.push({
             id: Date.now(),
             name: nameText.split(" - ")[0],
@@ -326,7 +381,6 @@
             qty: qty,
             total: price * qty
         });
-
         renderActivities();
     });
 
@@ -338,7 +392,6 @@
     function renderActivities() {
         activityList.innerHTML = "";
         let additionalTotal = 0;
-
         state.activities.forEach(item => {
             additionalTotal += item.total;
             const li = document.createElement("li");
@@ -355,23 +408,26 @@
             `;
             activityList.appendChild(li);
         });
-
         const totalSemua = BASE_MENU_TOTAL + additionalTotal;
         grandTotalEl.textContent = state.formatter.format(totalSemua);
         updateHiddenInput();
     }
 
     function updateHiddenInput() {
+        // Gabungkan menu dari DB dan layanan tambahan buatan user
         const combined = [...menuDataFromDB, ...state.activities];
         activitiesDataInput.value = JSON.stringify(combined);
     }
 
-    const form = document.getElementById("reservationForm");
-    const confirmModal = document.getElementById("confirmModal");
-    const btnCancel = document.getElementById("btnCancelConfirm");
-    const btnFinal = document.getElementById("btnFinalSubmit");
-
-    form.addEventListener("submit", (e) => { e.preventDefault(); confirmModal.classList.add("active"); });
+    // --- LOGIKA SUBMIT FORM ---
+    form.addEventListener("submit", (e) => { 
+        if(!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        e.preventDefault(); 
+        confirmModal.classList.add("active"); 
+    });
     
     btnCancel.addEventListener("click", () => { 
         btnCancel.classList.add("selected"); 
@@ -382,36 +438,42 @@
     });
 
     btnFinal.addEventListener("click", async () => {
-        // Efek visual tombol ditekan
         btnFinal.classList.add("selected");
-        
-        // Sembunyikan modal konfirmasi dan tampilkan animasi loading
         confirmModal.classList.remove("active");
         loadingScreen.style.display = "flex";
-
+        
         const formData = new FormData(form);
         
+        // Penting: Ganti nilai occasion jika user pilih 'others'
+        if(occasionSelect.value === 'others') {
+            formData.set('occasion', otherOccasionInput.value);
+        }
+
         try {
             const response = await fetch(STORE_URL, {
                 method: 'POST',
                 body: formData,
-                headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" }
+                headers: { 
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Accept': 'application/json'
+                }
             });
+            
             const res = await response.json();
             
-            // Simulasi delay sedikit agar user bisa melihat animasi (opsional)
             setTimeout(() => {
                 if(res.success) {
                     window.location.href = res.redirect_url;
                 } else {
                     loadingScreen.style.display = "none";
-                    alert("Error: " + res.message);
+                    btnFinal.classList.remove("selected");
+                    alert("Error: " + JSON.stringify(res.errors || res.message));
                 }
-            }, 1500); // 1.5 detik delay
-
+            }, 1500);
         } catch (e) { 
             loadingScreen.style.display = "none";
-            alert("Gagal mengirim data."); 
+            btnFinal.classList.remove("selected");
+            alert("Connection failed. Please try again."); 
         }
     });
 </script>

@@ -9,7 +9,6 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    // Masukkan ke dalam sini
     protected $fillable = [
         'name', 
         'date', 
@@ -17,6 +16,11 @@ class Reservation extends Model
         'occasion', 
         'location', 
         'notes', 
-        'activities_data'
+        'activities_data' // Penting untuk menyimpan rincian item
+    ];
+
+    // Otomatis convert JSON ke Array saat diakses di Order Summary
+    protected $casts = [
+        'activities_data' => 'array',
     ];
 }
