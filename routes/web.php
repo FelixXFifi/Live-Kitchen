@@ -16,7 +16,7 @@ use App\Livewire\MenuKitchen;
 
 // --- 1. HALAMAN PUBLIK ---
 
-// Home & Menu
+// Home & Menu (Livewire)
 Route::get('/', MenuKitchen::class)->name('home');
 
 // Auth System
@@ -32,11 +32,12 @@ Route::get('/location', [InfoController::class, 'location'])->name('location.ind
 Route::get('/contact', [InfoController::class, 'contact'])->name('contact.index');
 Route::post('/contact/send', [InfoController::class, 'storeContact'])->name('contact.store');
 
-// Cart & Orders (Public Access)
+// Cart & Orders
 Route::get('/cart', CartIndex::class)->name('cart.index');
 Route::get('/order-list', function () {
     return view('orderList-page');
 })->name('order.list');
+
 Route::get('/order-detail/{id}', function ($id) {
     return view('orderDetail-page', ['orderId' => $id]);
 })->name('order.detail');
@@ -54,13 +55,13 @@ Route::middleware([
     'auth',
     config('jetstream.auth_session'),
     'verified',
-    'is_admin' // Satpam AdminMiddleware yang kita buat
+    'is_admin' // Middleware proteksi admin
 ])->group(function () {
 
-    // Main Admin Dashboard
+    // Main Admin Dashboard - Menggunakan DashboardController yang sudah di-merge
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Dashboard Jetstream (Dialihkan untuk admin atau proteksi tambahan)
+    // Dashboard Jetstream Default
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
