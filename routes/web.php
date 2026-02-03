@@ -26,6 +26,9 @@ Route::get('/login', function () {
 
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.post');
 
+// TAMBAHAN: Pastikan rute logout tersedia untuk membuang session
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 
 // --- FITUR RESERVASI & SUMMARY ---
 Route::controller(ReservationController::class)->group(function () {
@@ -53,27 +56,19 @@ Route::get('/order-detail/{id}', function ($id) {
 })->name('order.detail');
 
 
-// --- 2. PROTECTED ROUTES (USER BIASA) ---
+// --- 2. PROTECTED ROUTES (KHUSUS ADMIN) ---
+// Rute /dashboard dipindahkan ke sini agar User Biasa tertendang jika mencoba masuk
 Route::middleware([
     'auth',
     config('jetstream.auth_session'),
     'verified',
+    'is_admin' // Satpam ini akan mengecek apakah email == admin@mail.com
 ])->group(function () {
 
+    // User biasa mengetik /dashboard sekarang akan tertendang ke home
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-});
-
-
-// --- 3. ADMIN ROUTES (KHUSUS ADMIN DENGAN IS_ADMIN) ---
-Route::middleware([
-    'auth',
-    config('jetstream.auth_session'),
-    'verified',
-    'is_admin' // Menggunakan alias yang kita daftarkan di bootstrap/app.php
-])->group(function () {
 
     // Dashboard Admin
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -96,7 +91,7 @@ Route::middleware([
 });
 
 
-// --- 4. KEPERLUAN AUTH & SETTINGS (FIXED SYNTAX) ---
+// --- 3. KEPERLUAN AUTH & SETTINGS (FIXED SYNTAX) ---
 if (file_exists(__DIR__.'/auth.php')) {
     require __DIR__.'/auth.php';
 }

@@ -51,14 +51,8 @@ class LoginController extends Controller
         if (Auth::attempt($authData)) {
 
             $request->session()->regenerate();
-
-
-
             $user = Auth::user();
 
-
-
-            // CEK APAKAH DIA ADMIN 
 
             // Gunakan 'admin@mail.com' sesuai data yang berhasil kita buat di Tinker tadi
 
@@ -73,7 +67,6 @@ class LoginController extends Controller
             // Jika User Biasa, arahkan ke halaman utama (MenuKitchen) sesuai web.php
 
             return redirect()->route('home');
-
         }
 
 
