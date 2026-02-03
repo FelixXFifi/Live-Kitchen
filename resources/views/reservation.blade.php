@@ -55,13 +55,42 @@
         }
 
         .header {
-            padding: 30px 20px;
+            padding: 40px 20px 30px 20px;
             text-align: center;
             border-bottom: 2px solid var(--accent-gold);
-            position: relative;
+            position: relative; /* Penting untuk posisi tombol */
         }
 
         .header h2 { font-family: 'Playfair Display', serif; color: var(--accent-gold); font-size: 1.5rem; }
+
+        /* TOMBOL RECENT SUMMARY DI POJOK KANAN ATAS */
+        .btn-history {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(226, 194, 117, 0.1);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 8px 12px;
+            font-size: 10px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+            z-index: 10;
+        }
+
+        .btn-history:hover {
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+            box-shadow: 0 0 10px rgba(226, 194, 117, 0.4);
+        }
+
+        .btn-history i { font-size: 14px; }
 
         .form-content { padding: 25px; }
 
@@ -142,7 +171,6 @@
         }
         .btn-submit:hover { background-color: var(--accent-gold); }
 
-        /* MODAL STYLES */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center;
@@ -187,27 +215,27 @@
     <div class="loading-text">Progressing your order...</div>
 </div>
 
-
-
 <div class="outer-frame">
     <div class="reservation-container">
         <header class="header">
+            <a href="{{ route('order.summary') }}" class="btn-history" title="View Recent Orders">
+                <i class="fas fa-receipt"></i>
+                <span>Recent Summaries</span>
+            </a>
+
             <h2>Preferences & Reservation</h2>
         </header>
 
         <form id="reservationForm">
             @csrf
-            {{-- Data JSON gabungan (Cart + Additional Services) --}}
             <input type="hidden" name="activities_data" id="activitiesDataInput">
 
             <div class="form-content">
-                {{-- Nama --}}
                 <div class="form-group-card">
                     <label>Name under reservation:</label>
                     <input type="text" name="name" placeholder="Enter full name" required />
                 </div>
 
-                {{-- Tanggal & Waktu --}}
                 <div class="form-group-card">
                     <div style="display:flex; gap:10px;">
                         <div style="flex:1;">
@@ -221,7 +249,6 @@
                     </div>
                 </div>
 
-                {{-- Occasion & Location --}}
                 <div class="form-group-card">
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div style="display:flex; gap:10px;">
@@ -243,7 +270,6 @@
                             </div>
                         </div>
 
-                        {{-- Specify Others --}}
                         <div id="otherOccasionContainer">
                             <label>Specify Occasion:</label>
                             <input type="text" name="other_occasion" id="otherOccasionInput" placeholder="Enter your occasion details...">
@@ -251,11 +277,9 @@
                     </div>
                 </div>
 
-                {{-- List Orders & Layanan Tambahan --}}
                 <div class="form-group-card">
                     <label>Your Orders & Activities:</label>
                     
-                    {{-- Item dari Cart Database --}}
                     <ul class="activity-list" id="menuDatabaseList">
                         @foreach($cart as $item)
                         <li class="activity-item menu-item">
@@ -270,7 +294,6 @@
 
                     <hr style="border: 0; border-top: 1px dashed rgba(226,194,117,0.3); margin: 15px 0;">
 
-                    {{-- Kontrol Layanan Tambahan --}}
                     <div class="activity-controls">
                         <select id="activitySelect" style="flex: 2;">
                             <option value="0" disabled selected>Tambah Layanan (Opsional)</option>
@@ -284,7 +307,6 @@
                         <button type="button" class="btn-add" id="btnAddActivity"><i class="fas fa-plus"></i></button>
                     </div>
 
-                    {{-- List Layanan yang ditambahkan --}}
                     <ul class="activity-list" id="activityList"></ul>
 
                     <div class="total-section">
@@ -293,7 +315,6 @@
                     </div>
                 </div>
 
-                {{-- Notes --}}
                 <div class="form-group-card">
                     <label>Special Notes:</label>
                     <textarea name="notes" rows="2" placeholder="Dietary requirements or special requests..."></textarea>
@@ -307,7 +328,6 @@
     </div>
 </div>
 
-{{-- MODAL KONFIRMASI --}}
 <div class="modal-overlay" id="confirmModal">
     <div class="modal">
         <h3 style="color: var(--accent-gold); font-family: 'Playfair Display', serif;">Confirm Reservation</h3>
@@ -323,7 +343,6 @@
     const STORE_URL = "{{ route('reservation.store') }}";
     const BASE_MENU_TOTAL = {{ $cartTotal }}; 
     
-    // Ambil data awal dari PHP cart
     const menuDataFromDB = [
         @foreach($cart as $item)
         { name: "{{ $item['name'] }}", price: {{ $item['price'] }}, qty: {{ $item['qty'] }}, total: {{ $item['price'] * $item['qty'] }} },
@@ -335,7 +354,6 @@
         formatter: new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 })
     };
 
-    // Elements
     const btnAdd = document.getElementById("btnAddActivity");
     const activitySelect = document.getElementById("activitySelect");
     const activityQty = document.getElementById("activityQty");
@@ -351,7 +369,6 @@
     const btnCancel = document.getElementById("btnCancelConfirm");
     const btnFinal = document.getElementById("btnFinalSubmit");
 
-    // --- LOGIKA MUNCULKAN INPUT "OTHERS" ---
     occasionSelect.addEventListener("change", function() {
         if (this.value === "others") {
             otherOccasionContainer.style.display = "block";
@@ -364,10 +381,8 @@
         }
     });
 
-    // Jalankan pertama kali untuk set input hidden awal
     updateHiddenInput();
 
-    // --- LOGIKA LAYANAN TAMBAHAN ---
     btnAdd.addEventListener("click", () => {
         const price = parseInt(activitySelect.value);
         const nameText = activitySelect.options[activitySelect.selectedIndex].text;
@@ -414,12 +429,10 @@
     }
 
     function updateHiddenInput() {
-        // Gabungkan menu dari DB dan layanan tambahan buatan user
         const combined = [...menuDataFromDB, ...state.activities];
         activitiesDataInput.value = JSON.stringify(combined);
     }
 
-    // --- LOGIKA SUBMIT FORM ---
     form.addEventListener("submit", (e) => { 
         if(!form.checkValidity()) {
             form.reportValidity();
@@ -443,8 +456,6 @@
         loadingScreen.style.display = "flex";
         
         const formData = new FormData(form);
-        
-        // Penting: Ganti nilai occasion jika user pilih 'others'
         if(occasionSelect.value === 'others') {
             formData.set('occasion', otherOccasionInput.value);
         }
@@ -458,9 +469,7 @@
                     'Accept': 'application/json'
                 }
             });
-            
             const res = await response.json();
-            
             setTimeout(() => {
                 if(res.success) {
                     window.location.href = res.redirect_url;
