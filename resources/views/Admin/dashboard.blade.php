@@ -16,28 +16,41 @@
     <div class="min-h-screen flex flex-col">
         <nav class="bg-[#2c4c58] p-4 flex justify-between items-center text-[#c2a978] shadow-md">
             <h1 class="text-xl tracking-widest uppercase font-serif">Live Kitchen</h1>
-            <div class="w-10 h-10 bg-gray-300 rounded-full border-2 border-[#c2a978]"></div>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-white transition">DASHBOARD</a>
+                <a href="#" class="hover:text-white transition">MENU</a>
+                <a href="#" class="hover:text-white transition">PESANAN</a>
+                <button class="bg-transparent border border-[#c2a978] hover:bg-[#c2a978] hover:text-[#2c4c58] px-4 py-1 rounded transition text-sm">LOGOUT</button>
+                <div class="w-10 h-10 bg-[#c2a978] rounded-full flex items-center justify-center text-[#2c4c58] font-bold">S</div>
+            </div>
         </nav>
 
-        <div class="h-32 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1200&q=80');">
-            <div class="absolute inset-0 bg-pink-500/10"></div>
+        <div class="h-64 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1200&q=80');">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
+            <div class="absolute bottom-8 left-8 text-white z-10">
+                <h2 class="text-4xl font-serif font-bold mb-2">Welcome Back, Salsabilla</h2>
+                <p class="text-lg opacity-90">Kelola dapur mewahmu hari ini.</p>
+            </div>
         </div>
 
-        <main class="p-8 flex-grow">
+        <main class="p-8 flex-grow -mt-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                 @php
                     $cards = [
-                        ['label' => 'Jumlah menu:', 'value' => $stats['jumlah_menu']],
-                        ['label' => 'Jumlah Menu Kosong:', 'value' => $stats['menu_kosong']],
-                        ['label' => 'Jumlah Pesanan:', 'value' => $stats['jumlah_pesanan']],
-                        ['label' => 'Status Website:', 'value' => $stats['status_website']],
+                        ['label' => 'JUMLAH MENU:', 'value' => '24'],
+                        ['label' => 'MENU KOSONG:', 'value' => '3'],
+                        ['label' => 'TOTAL PESANAN:', 'value' => '12'],
+                        ['label' => 'STATUS SITE:', 'value' => 'ONLINE', 'highlight' => true],
                     ];
                 @endphp
 
                 @foreach($cards as $card)
-                <div class="bg-white p-6 shadow-md relative border-l-4 border-[#c2a978] transform transition hover:scale-105">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">{{ $card['label'] }}</p>
-                    <p class="text-3xl text-center mt-3 font-serif font-bold text-[#2c4c58]">{{ $card['value'] }}</p>
+                <div class="bg-white p-6 shadow-lg relative border-l-4 border-[#c2a978] transform transition hover:scale-105">
+                    <div class="absolute top-4 left-4 w-8 h-8 border-2 border-[#c2a978] opacity-20"></div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">{{ $card['label'] }}</p>
+                    <p class="text-4xl text-center mt-3 font-serif font-bold {{ isset($card['highlight']) ? 'text-green-600' : 'text-[#2c4c58]' }}">
+                        {{ $card['value'] }}
+                    </p>
                 </div>
                 @endforeach
             </div>

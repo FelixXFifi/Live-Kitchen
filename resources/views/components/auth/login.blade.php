@@ -175,12 +175,12 @@
 
             <div class="input-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Your identity" required onkeypress="createSparkle(event)">
+                <input type="text" id="username" name="username" placeholder="Username" required onkeypress="createSparkle(event)">
             </div>
             
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
+                <input type="password" id="password" name="password" placeholder="  " required>
             </div>
 
             <button type="submit" class="btn-login">Sign In</button>

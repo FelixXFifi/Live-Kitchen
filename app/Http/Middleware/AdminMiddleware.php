@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class IsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah user login dan apakah emailnya adalah admin
-        if (Auth::check() && Auth::user()->email === 'admin@gmail.com') {
+        // Pastikan pengecekan email ini SAMA dengan yang ada di LoginController
+        if (Auth::check() && Auth::user()->email === 'admin@mail.com') {
             return $next($request);
         }
 
-        // Jika bukan admin, arahkan ke dashboard biasa
-        return redirect('/dashboard')->with('error', 'Akses ditolak. Anda bukan admin.');
+        // Jika bukan admin, tendang ke home dengan pesan error
+        return redirect()->route('home')->with('error', 'Akses Khusus Admin!');
     }
 }
