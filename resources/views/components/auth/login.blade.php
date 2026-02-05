@@ -21,7 +21,7 @@
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
                         url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
@@ -165,7 +165,7 @@
     <div class="login-card">
         <h1>Login</h1>
         <p class="subtitle">Live Kitchen Experience</p>
-        
+
         <form id="loginForm" action="{{ route('login.post') }}" method="POST">
             @csrf @if(session('error'))
                 <div class="error-message">
@@ -177,7 +177,7 @@
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Username" required onkeypress="createSparkle(event)">
             </div>
-            
+
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="  " required>
@@ -189,7 +189,7 @@
         <div class="footer-links">
             <a href="#">Forgot Credentials?</a>
             <span style="color: #555; margin: 0 10px;">|</span>
-            <a href="#">Become a Member</a>
+            <a href="{{ route('register') }}">Become a Member</a>
         </div>
     </div>
 

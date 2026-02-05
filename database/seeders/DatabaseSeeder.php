@@ -8,12 +8,10 @@ use App\Models\User;
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
-    {
-        // Gunakan updateOrCreate: kalau email sudah ada, dia cuma update. Gak bakal error.
-      
-        // Sekarang panggil MenuSeeder yang sudah kamu pisah tadi
-        $this->call([
-            MenuSeeder::class,
-        ]);
-    }
+{
+    $this->call([
+        AdminSeeder::class,
+        MenuSeeder::class, // Seeder menu Anda yang tadi
+    ]);
+}
 }

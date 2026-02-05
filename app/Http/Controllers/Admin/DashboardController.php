@@ -4,21 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// Amankan dengan mengimpor model kamu di sini nanti
-// Contoh: use App\Models\Menu;
+use App\Models\Menu; 
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Data ini nantinya bisa kamu ambil langsung dari Database
+        // Ambil semua data menu
+        $menus = Menu::all(); 
+
+        // Hitung statistik
         $stats = [
-            'jumlah_menu' => 0,      // Contoh: Menu::count()
-            'menu_kosong' => 0,      // Contoh: Menu::where('stok', 0)->count()
-            'jumlah_pesanan' => 0,   // Contoh: Order::count()
-            'status_website' => 'Aktif'
+            'jumlah_menu'    => Menu::count(),
+            'menu_kosong'    => 0, // Diubah ke 0 dulu agar tidak error kolom 'stok'
+            'jumlah_pesanan' => 0, 
+            'status_website' => 'At Service'
         ];
 
-        return view('admin.dashboard', compact('stats'));
+        return view('admin.dashboard', compact('menus', 'stats'));
     }
 }

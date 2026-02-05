@@ -2,13 +2,16 @@
     
     <div class="max-w-5xl w-full mb-6 text-center">
         <div class="flex items-center justify-between mb-4">
-            <a href="/" class="text-[#f1e4bc] hover:scale-110 transition-all duration-300 p-2">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="{{ route('admin.dashboard') }}" class="text-[#f1e4bc] hover:scale-110 transition-all duration-300 p-2 flex items-center gap-2 group">
+                <svg class="w-8 h-8 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
+                <span class="text-[10px] tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">Back to Suite</span>
             </a>
+
             <h2 class="text-[#f1e4bc] text-[10px] md:text-xs tracking-[0.4em] uppercase opacity-60 font-bold">New Creation</h2>
-            <div class="w-12"></div> </div>
+            <div class="w-12"></div> 
+        </div>
         <div class="h-[1px] bg-[#f1e4bc]/20 w-full mb-4"></div>
         <h1 class="text-[#f1e4bc] text-3xl md:text-4xl tracking-[0.5em] uppercase font-light">Culinary Gallery</h1>
     </div>
@@ -37,7 +40,7 @@
                             <option value="Main course">Main course</option>
                             <option value="Best Seller">Best Seller</option>
                             <option value="Seasonal Specials">Seasonal Specials</option>
-                            <option value="Signiture Dish">Signiture Dish</option>
+                            <option value="Signature Dish">Signature Dish</option>
                         </select>
                         @error('classification') <span class="text-red-500 text-[10px] mt-1 italic">{{ $message }}</span> @enderror
                     </div>
@@ -104,7 +107,7 @@
 
     <div class="max-w-5xl w-full mt-8 flex justify-center pb-8">
         <button wire:click="save" class="group relative bg-[#c2b280] hover:bg-[#1a3a4a] text-[#1a3a4a] hover:text-[#f1e4bc] font-bold py-4 px-32 rounded-sm shadow-[0_20px_50px_rgba(194,178,128,0.3)] transform transition-all duration-500 active:scale-95 uppercase tracking-[0.5em] text-sm overflow-hidden">
-            <span class="relative z-10">Menambahkan</span>
+            <span class="relative z-10">Tambahkan ke Katalog</span>
             <div class="absolute inset-0 w-0 bg-[#1a3a4a] transition-all duration-500 ease-out group-hover:w-full"></div>
         </button>
     </div>
