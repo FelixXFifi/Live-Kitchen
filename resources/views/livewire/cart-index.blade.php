@@ -26,12 +26,12 @@
 
                     <div class="w-32 h-24 bg-[#DBE2E9] rounded-sm flex-none overflow-hidden relative shadow-inner">
                          <div class="absolute inset-0 bg-[#345061]/5 group-hover:bg-transparent transition-colors z-10"></div>
-                        @if(!empty($item['image']))
-                            <img src="{{ asset('images/' . $item['image']) }}"
-                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                 alt="{{ $item['name'] }}"
-                                 onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif\'>Culinary<br>Masterpiece</div>'">
-                        @else
+                           @if(!empty($item['image']))
+        <img src="{{ $item['image'] }}"
+             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+             alt="{{ $item['name'] }}"
+             onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif\'>Culinary<br>Masterpiece</div>'">
+    @else
                             <div class="w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif">
                                 Image Not<br>Curated
                             </div>

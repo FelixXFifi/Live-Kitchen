@@ -1,6 +1,6 @@
-
 <div class="min-h-screen bg-[#DBE2E9] relative"
      x-data="{
+        activeTab: 'all-menu',
         luxuryCartAnimation(menuId) {
             const item = document.getElementById('menu-card-' + menuId);
             const cart = document.getElementById('cart-icon-target');
@@ -62,6 +62,14 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5A059; }
         [x-cloak] { display: none !important; }
+        
+        /* GARIS TEBAL CUSTOM */
+        .bold-divider { 
+            height: 2px !important; 
+            background-color: #2D4A63;
+            opacity: 0.4; /* Lebih kelihatan dibanding sebelumnya */
+            border: none;
+        }
     </style>
 
     <div class="w-full bg-[#1e3243] py-3 px-6 md:px-12 flex justify-between items-center shadow-md z-[60] relative border-b border-white/5">
@@ -82,7 +90,8 @@
 
     <div x-data="{ activeSlide: 1, loop() { setInterval(() => { this.activeSlide = this.activeSlide === 2 ? 1 : this.activeSlide + 1 }, 5000) } }"
         x-init="loop()"
-        class="relative w-full h-64 md:h-[420px] overflow-hidden shadow-lg z-10" id="top">
+        class="relative w-full h-64 md:h-[420px] overflow-hidden shadow-lg z-10" id="top"
+        x-intersect:enter="activeTab = 'all-menu'">
         <div x-show="activeSlide === 1" x-transition.opacity.duration.1000ms class="absolute inset-0">
             <img src="{{ asset('images/j (1).png') }}" class="w-full h-full object-cover">
         </div>
@@ -95,7 +104,7 @@
     <div class="flex flex-col lg:flex-row items-start max-w-full relative">
         <aside class="w-full lg:w-80 bg-[#2D4A63] lg:h-screen lg:sticky lg:top-0 flex-shrink-0 shadow-2xl z-50 border-t-4 border-[#1e3243]">
             <div class="p-8 flex flex-col h-full">
-                <div class="w-12 h-[1px] bg-[#C5A059] mb-2 opacity-60"></div>
+                <div class="w-12 h-[2px] bg-[#C5A059] mb-2 opacity-80"></div>
                 <h1 class="text-[#C5A059] text-3xl font-serif italic tracking-widest mb-10 uppercase text-center">Live Kitchen</h1>
 
                 <div class="relative mb-8">
@@ -104,13 +113,19 @@
                 </div>
 
                 <nav class="flex flex-col gap-1 overflow-y-auto pr-2 custom-scrollbar">
-                    <a href="#top" class="w-full text-left py-4 px-6 rounded-sm text-[#C5A059] font-bold text-[11px] uppercase tracking-[0.2em] border border-[#C5A059]/30 hover:bg-[#C5A059] hover:text-white transition-all duration-300 block">
+                    <a href="#top" 
+                       @click="activeTab = 'all-menu'"
+                       :class="activeTab === 'all-menu' ? 'bg-[#C5A059] text-white border-[#C5A059]' : 'text-[#C5A059] border-[#C5A059]/30 hover:bg-[#C5A059] hover:text-white'"
+                       class="w-full text-left py-4 px-6 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] border transition-all duration-300 block">
                         <span>✧ ALL MENU</span>
                     </a>
 
                     @foreach(['Foods', 'Drinks', 'Desserts', 'Quick Bites', 'Healthy Options'] as $cat)
-                        <a href="#{{ Str::slug($cat) }}" 
-                           class="w-full text-left py-4 px-6 rounded-sm text-white font-bold text-[11px] uppercase tracking-[0.2em] border border-white/5 hover:bg-[#C5A059] transition-all duration-300 group block">
+                        @php $slug = Str::slug($cat); @endphp
+                        <a href="#{{ $slug }}" 
+                           @click="activeTab = '{{ $slug }}'"
+                           :class="activeTab === '{{ $slug }}' ? 'bg-[#C5A059] text-white border-[#C5A059]' : 'text-white border-white/5 hover:bg-[#C5A059]'"
+                           class="w-full text-left py-4 px-6 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] border transition-all duration-300 group block">
                             <span class="group-hover:translate-x-2 inline-block transition-transform">{{ $cat }}</span>
                         </a>
                     @endforeach
@@ -129,21 +144,24 @@
 
             <div class="flex flex-col gap-y-12">
                 @foreach(['Foods', 'Drinks', 'Desserts', 'Quick Bites', 'Healthy Options'] as $section)
-                    <section class="space-y-6" id="{{ Str::slug($section) }}">
+                    @php $currentSlug = Str::slug($section); @endphp
+                    <section class="space-y-6 scroll-mt-24" 
+                             id="{{ $currentSlug }}"
+                             x-intersect:enter="activeTab = '{{ $currentSlug }}'"
+                             x-intersect.margin="-20% 0px -70% 0px">
                         
                         <div class="flex items-center gap-4">
-                            <div class="h-[1px] bg-[#2D4A63] flex-1 opacity-20"></div>
+                            <div class="bold-divider flex-1"></div>
                             <h2 class="text-2xl font-serif text-[#2D4A63] italic uppercase tracking-wider text-center px-4">
                                 {{ $section }}
                             </h2>
-                            <div class="h-[1px] bg-[#2D4A63] flex-1 opacity-20"></div>
+                            <div class="bold-divider flex-1"></div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @php $filteredMenus = $menus->where('category', $section); @endphp
                             @forelse($filteredMenus as $menu)
                                 <div id="menu-card-{{ $menu->id }}" class="bg-white p-4 rounded-sm shadow-sm flex flex-col gap-4 relative border border-gray-100 hover:shadow-lg transition-all group">
-                                    
                                     <div class="w-full h-44 bg-[#F5F5F5] rounded-sm flex-shrink-0 overflow-hidden border border-gray-100">
                                         @if($menu->image)
                                             <img src="{{ str_starts_with($menu->image, 'http') ? $menu->image : asset('images/' . $menu->image) }}" 
@@ -158,7 +176,6 @@
                                         <h4 class="text-sm font-bold text-[#2D4A63] font-serif uppercase group-hover:text-[#C5A059] transition-colors line-clamp-2 h-10">{{ $menu->name }}</h4>
                                         <div class="mt-2 border-t border-gray-50 pt-3 flex justify-between items-center">
                                             <p class="text-[#2D4A63] text-base font-bold">Rp {{ number_format($menu->price, 0, ',', '.') }}</p>
-                                            
                                             <button wire:click="selectMenu({{ $menu->id }})" class="w-9 h-9 rounded-full border border-gray-100 text-[#2D4A63] flex items-center justify-center hover:bg-[#C5A059] hover:text-white transition-all shadow-sm active:scale-95">
                                                 <span class="text-xl">+</span>
                                             </button>
