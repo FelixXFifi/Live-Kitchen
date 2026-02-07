@@ -63,15 +63,15 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5A059; }
         [x-cloak] { display: none !important; }
         
-        /* GARIS TEBAL CUSTOM */
         .bold-divider { 
             height: 2px !important; 
             background-color: #2D4A63;
-            opacity: 0.4; /* Lebih kelihatan dibanding sebelumnya */
+            opacity: 0.4;
             border: none;
         }
     </style>
 
+    {{-- NAVBAR --}}
     <div class="w-full bg-[#1e3243] py-3 px-6 md:px-12 flex justify-between items-center shadow-md z-[60] relative border-b border-white/5">
         <div class="text-white/80 text-[10px] tracking-widest uppercase font-bold">Live Kitchen</div>
         <div class="flex items-center gap-4">
@@ -88,9 +88,10 @@
         </div>
     </div>
 
+    {{-- BANNER ATAS (SUDAH DIKECILIN) --}}
     <div x-data="{ activeSlide: 1, loop() { setInterval(() => { this.activeSlide = this.activeSlide === 2 ? 1 : this.activeSlide + 1 }, 5000) } }"
         x-init="loop()"
-        class="relative w-full h-64 md:h-[420px] overflow-hidden shadow-lg z-10" id="top"
+        class="relative w-full h-48 md:h-[280px] overflow-hidden shadow-lg z-10" id="top"
         x-intersect:enter="activeTab = 'all-menu'">
         <div x-show="activeSlide === 1" x-transition.opacity.duration.1000ms class="absolute inset-0">
             <img src="{{ asset('images/j (1).png') }}" class="w-full h-full object-cover">
@@ -98,10 +99,11 @@
         <div x-show="activeSlide === 2" x-transition.opacity.duration.1000ms class="absolute inset-0">
             <img src="{{ asset('images/h.jpg') }}" class="w-full h-full object-cover">
         </div>
-        <div class="absolute inset-0 bg-black/10"></div>
+        <div class="absolute inset-0 bg-black/20"></div> {{-- Gelapkan sedikit agar lebih elegan --}}
     </div>
 
     <div class="flex flex-col lg:flex-row items-start max-w-full relative">
+        {{-- SIDEBAR --}}
         <aside class="w-full lg:w-80 bg-[#2D4A63] lg:h-screen lg:sticky lg:top-0 flex-shrink-0 shadow-2xl z-50 border-t-4 border-[#1e3243]">
             <div class="p-8 flex flex-col h-full">
                 <div class="w-12 h-[2px] bg-[#C5A059] mb-2 opacity-80"></div>
@@ -133,6 +135,7 @@
             </div>
         </aside>
 
+        {{-- MAIN CONTENT --}}
         <main class="flex-1 px-6 lg:px-16 pb-12 bg-[#DBE2E9] min-h-screen">
             <div class="relative pt-6 z-40 mb-10">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -194,6 +197,7 @@
         </main>
     </div>
 
+    {{-- MODAL --}}
     <div x-data="{ open: @entangle('showModal') }" x-show="open" class="fixed inset-0 z-[100] overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" @click="open = false"></div>
         <div class="flex min-h-full items-center justify-center p-4">
