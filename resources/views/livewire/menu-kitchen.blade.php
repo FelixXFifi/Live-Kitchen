@@ -58,12 +58,11 @@
 
     <style>
         html { scroll-behavior: smooth; }
-        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5A059; }
         [x-cloak] { display: none !important; }
         
-        /* Divider yang lebih tipis dan berkelas */
         .bold-divider { 
             height: 1px !important; 
             background: linear-gradient(to right, transparent, #2D4A63, transparent);
@@ -71,7 +70,6 @@
             border: none;
         }
 
-        /* Efek kartu mewah */
         .menu-luxury-card {
             transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
             border: 1px solid rgba(0,0,0,0.05);
@@ -103,7 +101,7 @@
     {{-- BANNER ATAS --}}
     <div x-data="{ activeSlide: 1, loop() { setInterval(() => { this.activeSlide = this.activeSlide === 2 ? 1 : this.activeSlide + 1 }, 5000) } }"
         x-init="loop()"
-        class="relative w-full h-48 md:h-[280px] overflow-hidden shadow-lg z-10" id="top"
+        class="relative w-full h-48 md:h-[300px] overflow-hidden shadow-lg z-0" id="top"
         x-intersect:enter="activeTab = 'all-menu'">
         <div x-show="activeSlide === 1" x-transition.opacity.duration.1000ms class="absolute inset-0">
             <img src="{{ asset('images/j (1).png') }}" class="w-full h-full object-cover">
@@ -115,45 +113,48 @@
     </div>
 
     <div class="flex flex-col lg:flex-row items-start max-w-full relative">
-        {{-- SIDEBAR (TIDAK DIUBAH SESUAI REQUEST) --}}
-        <aside class="w-full lg:w-80 bg-[#2D4A63] lg:h-screen lg:sticky lg:top-0 flex-shrink-0 shadow-2xl z-50 border-t-4 border-[#1e3243]">
-            <div class="p-8 flex flex-col h-full">
-                <div class="w-12 h-[2px] bg-[#C5A059] mb-2 opacity-80"></div>
-                <h1 class="text-[#C5A059] text-3xl font-serif italic tracking-widest mb-10 uppercase text-center">Live Kitchen</h1>
+        
+        {{-- SIDEBAR OPTIMIZED (DIPERLEBAR & FONT DIPERBESAR) --}}
+        <aside class="w-full lg:w-[400px] bg-[#2D4A63] lg:h-screen lg:sticky lg:top-0 flex-shrink-0 shadow-2xl z-50 border-t-4 border-[#1e3243]">
+            <div class="p-10 flex flex-col h-full">
+                <div class="w-16 h-[2px] bg-[#C5A059] mb-4 opacity-80"></div>
+                <h1 class="text-[#C5A059] text-4xl font-serif italic tracking-widest mb-12 uppercase text-center leading-tight">Live Kitchen</h1>
 
-                <div class="relative mb-8">
+                <div class="relative mb-12">
                     <input type="text" wire:model.live="search" placeholder="Search menu..."
-                        class="w-full bg-white/10 border border-white/20 rounded-sm py-3 px-4 text-white text-sm focus:outline-none focus:ring-1 focus:ring-[#C5A059] placeholder:text-white/40">
+                        class="w-full bg-white/10 border border-white/20 rounded-sm py-4 px-5 text-white text-base focus:outline-none focus:ring-1 focus:ring-[#C5A059] placeholder:text-white/40">
                 </div>
 
-                <nav class="flex flex-col gap-1 overflow-y-auto pr-2 custom-scrollbar">
+                <nav class="flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar">
                     <a href="#top" 
                        @click="activeTab = 'all-menu'"
                        :class="activeTab === 'all-menu' ? 'bg-[#C5A059] text-white border-[#C5A059]' : 'text-[#C5A059] border-[#C5A059]/30 hover:bg-[#C5A059] hover:text-white'"
-                       class="w-full text-left py-4 px-6 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] border transition-all duration-300 block">
-                        <span>✧ ALL MENU</span>
+                       class="w-full text-left py-5 px-8 rounded-sm font-bold text-[13px] uppercase tracking-[0.3em] border transition-all duration-300 block">
+                       <span>✧ ALL MENU</span>
                     </a>
 
                     @foreach(['Foods', 'Drinks', 'Desserts', 'Quick Bites', 'Healthy Options'] as $cat)
                         @php $slug = Str::slug($cat); @endphp
                         <a href="#{{ $slug }}" 
                            @click="activeTab = '{{ $slug }}'"
-                           :class="activeTab === '{{ $slug }}' ? 'bg-[#C5A059] text-white border-[#C5A059]' : 'text-white border-white/5 hover:bg-[#C5A059]'"
-                           class="w-full text-left py-4 px-6 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] border transition-all duration-300 group block">
-                            <span class="group-hover:translate-x-2 inline-block transition-transform">{{ $cat }}</span>
+                           :class="activeTab === '{{ $slug }}' ? 'bg-[#C5A059] text-white border-[#C5A059]' : 'text-white border-white/10 hover:bg-[#C5A059]'"
+                           class="w-full text-left py-5 px-8 rounded-sm font-bold text-[13px] uppercase tracking-[0.3em] border transition-all duration-300 group block">
+                            <span class="group-hover:translate-x-3 inline-block transition-transform">{{ $cat }}</span>
                         </a>
                     @endforeach
                 </nav>
             </div>
         </aside>
 
-        {{-- MAIN CONTENT (UPGRADED TO LUXURY) --}}
+        {{-- MAIN CONTENT --}}
         <main class="flex-1 px-6 lg:px-16 pb-12 bg-[#f4f7f9] min-h-screen">
-            <div class="relative pt-6 z-40 mb-10">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <a href="{{ route('location.index') }}" class="bg-white py-5 rounded-sm border border-gray-100 text-[10px] font-bold text-[#2D4A63] uppercase tracking-widest shadow-md hover:bg-[#2D4A63] hover:text-white transition-all text-center">Location</a>
-                    <a id="cart-icon-target" href="{{ route('cart.index') }}" class="bg-white py-5 rounded-sm border border-gray-100 text-[10px] font-bold text-[#2D4A63] uppercase tracking-widest shadow-md hover:bg-[#2D4A63] hover:text-white transition-all text-center">Shopping Cart</a>
-                    <a href="{{ route('contact.index') }}" class="bg-white py-5 rounded-sm border border-gray-100 text-[10px] font-bold text-[#2D4A63] uppercase tracking-widest shadow-md hover:bg-[#2D4A63] hover:text-white transition-all text-center">Contact Us</a>
+            
+            {{-- 3 NAV CARDS --}}
+            <div class="relative -mt-10 z-40 mb-14"> 
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="{{ route('location.index') }}" class="bg-white py-6 rounded-sm border border-gray-100 text-[10px] font-bold text-[#2D4A63] uppercase tracking-widest shadow-xl hover:bg-[#2D4A63] hover:text-white transition-all text-center">Location</a>
+                    <a id="cart-icon-target" href="{{ route('cart.index') }}" class="bg-white py-6 rounded-sm border border-gray-100 text-[10px] font-bold text-[#2D4A63] uppercase tracking-widest shadow-xl hover:bg-[#2D4A63] hover:text-white transition-all text-center">Shopping Cart</a>
+                    <a href="{{ route('contact.index') }}" class="bg-white py-6 rounded-sm border border-gray-100 text-[10px] font-bold text-[#2D4A63] uppercase tracking-widest shadow-xl hover:bg-[#2D4A63] hover:text-white transition-all text-center">Contact Us</a>
                 </div>
             </div>
 
@@ -165,7 +166,6 @@
                              x-intersect:enter="activeTab = '{{ $currentSlug }}'"
                              x-intersect.margin="-20% 0px -70% 0px">
                         
-                        {{-- Section Title --}}
                         <div class="flex flex-col items-center mb-10">
                             <h2 class="text-3xl font-serif text-[#2D4A63] italic uppercase tracking-widest text-center px-4">
                                 {{ $section }}
@@ -177,7 +177,6 @@
                             @php $filteredMenus = $menus->where('category', $section); @endphp
                             @forelse($filteredMenus as $menu)
                                 <div id="menu-card-{{ $menu->id }}" class="menu-luxury-card bg-white flex flex-col group overflow-hidden">
-                                    {{-- Sinematic Image Aspect Ratio --}}
                                     <div class="w-full h-56 bg-[#F5F5F5] overflow-hidden relative">
                                         @if($menu->image)
                                             <img src="{{ str_starts_with($menu->image, 'http') ? $menu->image : asset('images/' . $menu->image) }}" 
@@ -186,7 +185,6 @@
                                         @else
                                             <div class="w-full h-full flex items-center justify-center text-gray-300 text-[10px] uppercase tracking-widest">No Image</div>
                                         @endif
-                                        {{-- Overlay minimalis saat hover --}}
                                         <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                     </div>
 
@@ -217,7 +215,7 @@
         </main>
     </div>
 
-    {{-- MODAL (UPGRADED TO LUXURY) --}}
+    {{-- MODAL --}}
     <div x-data="{ open: @entangle('showModal') }" x-show="open" class="fixed inset-0 z-[100] overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-[#1e3243]/80 backdrop-blur-sm" @click="open = false"></div>
         <div class="flex min-h-full items-center justify-center p-4">
@@ -238,13 +236,11 @@
                             <h3 class="text-2xl font-serif italic text-[#2D4A63] uppercase tracking-wider">{{ $selectedMenu->name }}</h3>
                             <button @click="open = false" class="text-gray-300 hover:text-red-500 text-2xl transition-colors">&times;</button>
                         </div>
-                        
                         <div class="mb-8">
                             <p class="text-gray-500 text-xs leading-relaxed italic border-l-2 border-[#C5A059] pl-4">
                                 {{ $selectedMenu->description ?? 'A signature masterpiece crafted with the finest ingredients from our Live Kitchen.' }}
                             </p>
                         </div>
-
                         <div class="flex flex-col gap-4">
                             <span class="text-2xl font-bold text-[#2D4A63]">Rp {{ number_format($selectedMenu->price, 0, ',', '.') }}</span>
                             <button wire:click="addToCart" class="bg-[#2D4A63] hover:bg-[#C5A059] text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all shadow-md active:scale-95">Add to My Selection</button>
