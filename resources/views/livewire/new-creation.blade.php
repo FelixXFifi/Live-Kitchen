@@ -2,18 +2,20 @@
     
     <div class="max-w-5xl w-full mb-6 text-center">
         <div class="flex items-center justify-between mb-4">
-            <a href="{{ route('admin.dashboard') }}" class="text-[#f1e4bc] hover:scale-110 transition-all duration-300 p-2 flex items-center gap-2 group">
-                <svg class="w-8 h-8 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                <span class="text-[10px] tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">Back to Suite</span>
+            <a href="{{ route('admin.dashboard') }}" class="text-[#f1e4bc] hover:scale-105 transition-all duration-300 p-2 flex items-center gap-3 group">
+                <div class="w-10 h-10 border border-[#f1e4bc]/30 rounded-full flex items-center justify-center group-hover:border-[#f1e4bc] transition-colors">
+                    <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </div>
+                <span class="text-[10px] tracking-[0.2em] uppercase opacity-60 group-hover:opacity-100 transition-opacity font-bold">Back to Dashboard</span>
             </a>
 
-            <h2 class="text-[#f1e4bc] text-[10px] md:text-xs tracking-[0.4em] uppercase opacity-60 font-bold">New Creation</h2>
-            <div class="w-12"></div> 
-        </div>
+            <h2 class="text-[#f1e4bc] text-[10px] md:text-xs tracking-[0.4em] uppercase opacity-60 font-bold">Management Suite</h2>
+            <div class="w-24"></div> </div>
+        
         <div class="h-[1px] bg-[#f1e4bc]/20 w-full mb-4"></div>
-        <h1 class="text-[#f1e4bc] text-3xl md:text-4xl tracking-[0.5em] uppercase font-light">Culinary Gallery</h1>
+        <h1 class="text-[#f1e4bc] text-3xl md:text-4xl tracking-[0.5em] uppercase font-light">Add New Creation</h1>
     </div>
 
     <div class="max-w-5xl w-full bg-white rounded-sm shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col md:min-h-[550px]">

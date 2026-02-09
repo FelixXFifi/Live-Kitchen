@@ -29,19 +29,30 @@
             <h2 class="text-2xl font-light italic">Detailed Activities:</h2> 
             <div class="space-y-3">
                 @forelse($items as $item)
-                <div class="bg-white/10 text-[#f1e4bc] p-4 flex gap-4 rounded-sm border border-[#f1e4bc]/10 shadow-lg">
-                    <div class="w-10 h-10 bg-[#f1e4bc]/10 rounded-sm flex items-center justify-center">
-                        <i class="fas fa-receipt opacity-50"></i>
+                <div class="bg-white/10 text-[#f1e4bc] p-4 flex gap-4 rounded-sm border border-[#f1e4bc]/10 shadow-lg items-center">
+                    
+                    {{-- BAGIAN GAMBAR (Ganti dari Icon ke Gambar Asli) --}}
+                    <div class="w-14 h-14 bg-[#1a3a4a] rounded-sm flex-shrink-0 overflow-hidden border border-[#f1e4bc]/30 shadow-inner">
+                        @if(!empty($item['image']))
+                            <img src="{{ str_starts_with($item['image'], 'http') ? $item['image'] : asset('images/' . $item['image']) }}" 
+                                 class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-500"
+                                 alt="{{ $item['name'] }}">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-[#f1e4bc]/5">
+                                <i class="fas fa-utensils opacity-20"></i>
+                            </div>
+                        @endif
                     </div>
-                    <div class="flex-1">
-                        <p class="font-bold text-sm uppercase">{{ $item['name'] ?? 'Item' }}</p>
+
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-sm uppercase tracking-wide truncate">{{ $item['name'] ?? 'Item' }}</p>
                         <div class="flex justify-between text-[11px] mt-1 opacity-80">
-                            <span>Qty: {{ $item['qty'] ?? 1 }}</span>
+                            <span>Qty: {{ $item['qty'] ?? $item['quantity'] ?? 1 }}</span>
                             <span>@ Rp {{ number_format($item['price'] ?? 0, 0, ',', '.') }}</span>
                         </div>
                     </div>
-                    <div class="self-center font-bold text-sm text-right min-w-[100px]">
-                        Rp {{ number_format(($item['qty'] ?? 1) * ($item['price'] ?? 0), 0, ',', '.') }}
+                    <div class="font-bold text-sm text-right min-w-[90px]">
+                        Rp {{ number_format(($item['qty'] ?? $item['quantity'] ?? 1) * ($item['price'] ?? 0), 0, ',', '.') }}
                     </div>
                 </div>
                 @empty

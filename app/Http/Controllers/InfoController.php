@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ContactMessage; // Pastikan model ini sudah ada di App\Models
+use App\Models\ContactMessage;
 
 class InfoController extends Controller
 {
     public function contact() {
         // Memanggil file contactmessage.blade.php
+        // Memanggil file ContactMessage.php
         return view('contactmessage'); 
     }
 

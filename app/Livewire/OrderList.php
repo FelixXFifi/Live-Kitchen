@@ -46,8 +46,13 @@ class OrderList extends Component
             ->orderBy('date', $this->sortDirection) // Menggunakan variabel sortDirection (asc/desc)
             ->paginate(10); 
 
-        return view('livewire.order-list', [
-            'orders' => $orders
-        ]);
+        // return view('livewire.order-list', [
+        //     'orders' => $orders
+        // ]);
+
+        
+        return view('Admin.order-list', [
+        'orders' => $orders
+        ])->layout('components.layouts.app');
     }
 }

@@ -34,27 +34,29 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configureViews();
         $this->configureRateLimiting();
 
-        // --- KODE SAKTI REDIRECT DIMULAI DISINI ---
+        // --- KODE SAKTI REDIRECT DIPERBAIKI DISINI ---
 
-        // 1. Paksa Redirect Setelah Register ke Main Web
+        // 1. Paksa Redirect Setelah Register ke Reservation
         $this->app->singleton(RegisterResponse::class, function () {
             return new class implements RegisterResponse {
                 public function toResponse($request) {
-                    return redirect('/');
+                    // DIUBAH DARI '/' KE '/reservation'
+                    return redirect('/reservation');
                 }
             };
         });
 
-        // 2. Paksa Redirect Setelah Login ke Main Web
+        // 2. Paksa Redirect Setelah Login ke Reservation
         $this->app->singleton(LoginResponse::class, function () {
             return new class implements LoginResponse {
                 public function toResponse($request) {
-                    return redirect('/');
+                    // DIUBAH DARI '/' KE '/reservation'
+                    return redirect('/reservation');
                 }
             };
         });
 
-        // 3. Paksa Redirect Setelah Logout ke Login Page
+        // 3. Paksa Redirect Setelah Logout ke Beranda (Opsional)
         $this->app->singleton(LogoutResponse::class, function () {
             return new class implements LogoutResponse {
                 public function toResponse($request) {
