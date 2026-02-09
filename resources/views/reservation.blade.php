@@ -4,9 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Preferences & Reservation Details</title>
+    
+    {{-- SDK Midtrans Sandbox --}}
     <script type="text/javascript"
       src="https://app.sandbox.midtrans.com/snap/snap.js"
       data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
@@ -27,8 +30,7 @@
             font-family: 'Lora', serif;
             background-color: var(--bg-dark);
             background-image: linear-gradient(rgba(15, 29, 36, 0.8), rgba(15, 29, 36, 0.8)),
-                url('https://media.istockphoto.com/id/1170342049/id/foto/pemandangan-populer-di-meja-makanan-restoran-mewah-dengan-makanan-lezat-makanan-berbaring.jpg?s=612x612&w=0&k=20&c=-DsnPg6I2ciScCM3bkDk671muN3f-BpNkMzr4u8kdRQ='),
-                radial-gradient(circle at top right, #1a3a4a 0%, #0c161b 100%);
+                url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80');
             background-attachment: fixed;
             background-size: cover;
             background-position: center;
@@ -45,7 +47,7 @@
             padding: 12px;
             border: 1px solid rgba(226, 194, 117, 0.2);
             box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-            width: 100%; max-width: 500px;
+            width: 100%; max-width: 600px;
             border-radius: 2px;
         }
 
@@ -54,46 +56,15 @@
             border: 4px double var(--accent-gold);
             border-radius: 2px;
             overflow: hidden;
-            position: relative;
         }
 
         .header {
-            padding: 40px 20px 30px 20px;
+            padding: 30px 20px;
             text-align: center;
             border-bottom: 2px solid var(--accent-gold);
-            position: relative; /* Penting untuk posisi tombol */
         }
 
-        .header h2 { font-family: 'Playfair Display', serif; color: var(--accent-gold); font-size: 1.5rem; }
-
-        /* TOMBOL RECENT SUMMARY DI POJOK KANAN ATAS */
-        .btn-history {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(226, 194, 117, 0.1);
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            padding: 8px 12px;
-            font-size: 10px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-            z-index: 10;
-        }
-
-        .btn-history:hover {
-            background: var(--accent-gold);
-            color: var(--bg-dark);
-            box-shadow: 0 0 10px rgba(226, 194, 117, 0.4);
-        }
-
-        .btn-history i { font-size: 14px; }
+        .header h2 { font-family: 'Playfair Display', serif; color: var(--accent-gold); font-size: 1.5rem; letter-spacing: 2px;}
 
         .form-content { padding: 25px; }
 
@@ -108,10 +79,10 @@
         label {
             display: block;
             color: var(--accent-gold);
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         input, select, textarea {
@@ -123,35 +94,56 @@
             font-family: 'Lora', serif;
         }
 
-        #otherOccasionContainer {
-            margin-top: 15px;
-            display: none;
-            border-top: 1px solid rgba(226, 194, 117, 0.3);
-            padding-top: 15px;
+        /* Payment Options */
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 5px;
         }
 
-        .activity-controls { display: flex; gap: 8px; margin-bottom: 15px; }
-        .btn-add {
+        .pay-card {
+            border: 1px solid rgba(226, 194, 117, 0.3);
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .pay-card input { display: none; }
+        .pay-card i { font-size: 1.2rem; display: block; margin-bottom: 5px; opacity: 0.6; }
+        .pay-card span { font-size: 10px; text-transform: uppercase; font-weight: bold; }
+
+        .pay-card:has(input:checked) {
             background: var(--accent-gold);
             color: var(--bg-dark);
-            border: none; padding: 0 15px;
-            border-radius: 4px; cursor: pointer; font-weight: bold;
         }
 
+        /* Activity Lists */
         .activity-list { list-style: none; }
         .activity-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(255,255,255,0.05);
-            padding: 10px;
+            padding: 10px 12px;
             border-radius: 4px;
             margin-bottom: 8px;
             border-left: 3px solid var(--accent-gold);
         }
 
-        .menu-item { border-left: 3px solid #ffffff; background: rgba(255,255,255,0.1); }
-        .btn-remove { background: none; border: none; color: var(--danger); cursor: pointer; }
+        .activity-controls { display: flex; gap: 8px; margin-bottom: 15px; }
+
+        .btn-add { 
+            background: var(--accent-gold); 
+            border: none; padding: 0 15px; 
+            border-radius: 4px; cursor: pointer; 
+            color: var(--bg-dark);
+        }
+
+        .btn-remove { color: var(--danger); cursor: pointer; background: none; border: none; font-size: 0.8rem; margin-left: 10px; }
 
         .total-section {
             border-top: 1px solid rgba(226, 194, 117, 0.3);
@@ -161,34 +153,21 @@
             font-size: 1.2rem; color: var(--accent-gold);
         }
 
-        .form-footer { background-color: var(--input-deep); padding: 25px; border-top: 4px double var(--accent-gold); }
-
         .btn-submit {
-            width: 100%; padding: 15px;
+            width: 100%; padding: 18px;
             background-color: var(--btn-white);
             color: var(--bg-dark);
             border: none; border-radius: 4px;
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem; font-weight: bold;
+            font-size: 1.3rem; font-weight: bold;
             cursor: pointer; transition: 0.3s;
         }
+
         .btn-submit:hover { background-color: var(--accent-gold); }
 
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s;
-        }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal { background: var(--card-blue); padding: 40px; border: 2px solid var(--accent-gold); text-align: center; max-width: 400px; border-radius: 4px; }
+        #otherOccasionContainer { display: none; margin-top: 15px; }
 
-        .btn-modal-action {
-            padding: 12px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;
-            background: transparent; color: var(--accent-gold); border: 2px solid var(--accent-gold);
-            transition: 0.2s;
-        }
-        .btn-modal-action.selected { background-color: #fff; color: #000; border-color: #fff; box-shadow: 0 0 15px #fff; }
-
+        /* Loading & Modals */
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-dark); display: none; flex-direction: column;
@@ -199,29 +178,30 @@
             border: 5px solid rgba(226, 194, 117, 0.3);
             border-top-color: var(--accent-gold);
             border-radius: 50%;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
+            animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text {
-            color: var(--accent-gold); font-family: 'Playfair Display', serif;
-            font-size: 1.2rem; letter-spacing: 2px;
-            animation: pulse 1.5s infinite;
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center;
+            z-index: 1000;
         }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--card-blue); padding: 30px; border: 2px solid var(--accent-gold); text-align: center; max-width: 400px; }
     </style>
 </head>
 <body>
 
 <div id="loadingScreen" class="loading-overlay">
     <div class="spinner"></div>
-    <div class="loading-text">Progressing your order...</div>
+    <div class="loading-text" style="color:var(--accent-gold); margin-top:20px;">Processing Reservation...</div>
 </div>
 
 <div class="outer-frame">
     <div class="reservation-container">
         <header class="header">
-            <h2>Preferences & Reservation</h2>
+            <h2>RESERVATION DETAILS</h2>
         </header>
 
         <form id="reservationForm">
@@ -229,11 +209,13 @@
             <input type="hidden" name="activities_data" id="activitiesDataInput">
 
             <div class="form-content">
+                {{-- Personal Info --}}
                 <div class="form-group-card">
                     <label>Name under reservation:</label>
                     <input type="text" name="name" placeholder="Enter full name" required />
                 </div>
 
+                {{-- Date & Time --}}
                 <div class="form-group-card">
                     <div style="display:flex; gap:10px;">
                         <div style="flex:1;">
@@ -247,6 +229,7 @@
                     </div>
                 </div>
 
+                {{-- Occasion & Location --}}
                 <div class="form-group-card">
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div style="display:flex; gap:10px;">
@@ -267,7 +250,6 @@
                                 <input type="text" name="location" placeholder="e.g. Hall A" required />
                             </div>
                         </div>
-
                         <div id="otherOccasionContainer">
                             <label>Specify Occasion:</label>
                             <input type="text" name="other_occasion" id="otherOccasionInput" placeholder="Enter your occasion details...">
@@ -275,12 +257,29 @@
                     </div>
                 </div>
 
+                {{-- Payment Method --}}
+                <div class="form-group-card">
+                    <label>Payment Method</label>
+                    <div class="payment-options">
+                        <label class="pay-card">
+                            <input type="radio" name="payment_method" value="midtrans" checked>
+                            <i class="fas fa-credit-card"></i>
+                            <span>Online Payment</span>
+                        </label>
+                        <label class="pay-card">
+                            <input type="radio" name="payment_method" value="cod">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <span>Pay at Spot</span>
+                        </label>
+                    </div>
+                </div>
+
+                {{-- Orders & Activities --}}
                 <div class="form-group-card">
                     <label>Your Orders & Activities:</label>
-
                     <ul class="activity-list" id="menuDatabaseList">
                         @foreach($cart as $item)
-                        <li class="activity-item menu-item">
+                        <li class="activity-item">
                             <div>
                                 <div style="font-weight: 600;">{{ $item['name'] }}</div>
                                 <div style="font-size: 0.75rem; opacity: 0.8;">{{ $item['qty'] }} x Rp {{ number_format($item['price'], 0, ',', '.') }}</div>
@@ -293,7 +292,7 @@
                     <hr style="border: 0; border-top: 1px dashed rgba(226,194,117,0.3); margin: 15px 0;">
 
                     <div class="activity-controls">
-                        <select id="activitySelect" style="flex: 2;">
+                        <select id="activitySelectField" style="flex: 2;">
                             <option value="0" disabled selected>Tambah Layanan (Opsional)</option>
                             <option value="75000">Decoration - Rp 75.000</option>
                             <option value="100000">Buffet Extra - Rp 100.000</option>
@@ -305,7 +304,7 @@
                         <button type="button" class="btn-add" id="btnAddActivity"><i class="fas fa-plus"></i></button>
                     </div>
 
-                    <ul class="activity-list" id="activityList"></ul>
+                    <ul class="activity-list" id="extraActivityList"></ul>
 
                     <div class="total-section">
                         <span>Grand Total</span>
@@ -319,192 +318,151 @@
                 </div>
             </div>
 
-            <div class="form-footer">
+            <div class="form-footer" style="padding: 25px; background: var(--input-deep);">
                 <button type="submit" class="btn-submit" id="submitBtn">Confirm Reservation</button>
             </div>
         </form>
     </div>
 </div>
 
+{{-- Confirmation Modal --}}
 <div class="modal-overlay" id="confirmModal">
     <div class="modal">
-        <h3 style="color: var(--accent-gold); font-family: 'Playfair Display', serif;">Confirm Reservation</h3>
-        <p style="margin:15px 0; color: #fff; font-size: 0.9rem;">Are you sure the order details and additional services are correct?</p>
-        <div style="display:flex; gap:10px; justify-content:center; margin-top: 20px;">
-            <button type="button" class="btn-modal-action" id="btnCancelConfirm">No, Review</button>
-            <button type="button" class="btn-modal-action" id="btnFinalSubmit">Yes, Confirm</button>
+        <h3 style="color: var(--accent-gold); margin-bottom:10px;">Finalize Order?</h3>
+        <p style="color:#fff; font-size:0.9rem; margin-bottom:20px;">Confirm your details before proceeding to payment.</p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+            <button type="button" onclick="toggleModal(false)" style="background:none; color:#fff; border:1px solid #fff; padding:10px 20px; cursor:pointer;">Review</button>
+            <button type="button" id="btnFinalSubmit" style="background:var(--accent-gold); color:#000; border:none; padding:10px 20px; cursor:pointer; font-weight:bold;">Submit</button>
         </div>
     </div>
 </div>
 
 <script>
     const STORE_URL = "{{ route('reservation.store') }}";
-    const BASE_MENU_TOTAL = {{ $cartTotal }};
-
-    const menuDataFromDB = [
+    const BASE_TOTAL = {{ $cartTotal }};
+    const menuDataDB = [
         @foreach($cart as $item)
         { name: "{{ $item['name'] }}", price: {{ $item['price'] }}, qty: {{ $item['qty'] }}, total: {{ $item['price'] * $item['qty'] }} },
         @endforeach
     ];
 
     const state = {
-        activities: [],
+        extras: [],
         formatter: new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 })
     };
 
-    const btnAdd = document.getElementById("btnAddActivity");
-    const activitySelect = document.getElementById("activitySelect");
-    const activityQty = document.getElementById("activityQty");
-    const activityList = document.getElementById("activityList");
-    const grandTotalEl = document.getElementById("grandTotal");
-    const activitiesDataInput = document.getElementById("activitiesDataInput");
-    const loadingScreen = document.getElementById("loadingScreen");
-    const occasionSelect = document.getElementById("occasionSelect");
-    const otherOccasionContainer = document.getElementById("otherOccasionContainer");
-    const otherOccasionInput = document.getElementById("otherOccasionInput");
     const form = document.getElementById("reservationForm");
-    const confirmModal = document.getElementById("confirmModal");
-    const btnCancel = document.getElementById("btnCancelConfirm");
-    const btnFinal = document.getElementById("btnFinalSubmit");
+    const extraList = document.getElementById("extraActivityList");
+    const grandTotalEl = document.getElementById("grandTotal");
+    const activitiesInput = document.getElementById("activitiesDataInput");
+    const loading = document.getElementById("loadingScreen");
+    const modal = document.getElementById("confirmModal");
+    const occasionSelect = document.getElementById("occasionSelect");
+    const otherContainer = document.getElementById("otherOccasionContainer");
 
-    occasionSelect.addEventListener("change", function() {
-        if (this.value === "others") {
-            otherOccasionContainer.style.display = "block";
-            otherOccasionInput.setAttribute("required", "required");
-            otherOccasionInput.focus();
-        } else {
-            otherOccasionContainer.style.display = "none";
-            otherOccasionInput.removeAttribute("required");
-            otherOccasionInput.value = "";
-        }
+    // Handle Occasion "Others"
+    occasionSelect.addEventListener("change", (e) => {
+        otherContainer.style.display = e.target.value === "others" ? "block" : "none";
     });
 
-    updateHiddenInput();
+    // Add Service Logic
+    document.getElementById("btnAddActivity").addEventListener("click", () => {
+        const select = document.getElementById("activitySelectField");
+        const qtyInput = document.getElementById("activityQty");
+        const price = parseInt(select.value);
+        const qty = parseInt(qtyInput.value);
 
-    btnAdd.addEventListener("click", () => {
-        const price = parseInt(activitySelect.value);
-        const nameText = activitySelect.options[activitySelect.selectedIndex].text;
-        const qty = parseInt(activityQty.value);
-        if (price === 0 || isNaN(price)) return alert("Please select an additional service!");
-
-        state.activities.push({
+        if(!price || qty < 1) return;
+        
+        state.extras.push({
             id: Date.now(),
-            name: nameText.split(" - ")[0],
+            name: select.options[select.selectedIndex].text.split(" - ")[0],
             price: price,
             qty: qty,
             total: price * qty
         });
-        renderActivities();
+        
+        qtyInput.value = 1; // reset qty
+        render();
     });
 
-    window.removeActivity = function(id) {
-        state.activities = state.activities.filter(a => a.id !== id);
-        renderActivities();
-    }
+    window.removeExtra = function(id) {
+        state.extras = state.extras.filter(item => item.id !== id);
+        render();
+    };
 
-    function renderActivities() {
-        activityList.innerHTML = "";
-        let additionalTotal = 0;
-        state.activities.forEach(item => {
-            additionalTotal += item.total;
+    function render() {
+        extraList.innerHTML = "";
+        let extraTotal = 0;
+        state.extras.forEach(a => {
+            extraTotal += a.total;
             const li = document.createElement("li");
             li.className = "activity-item";
             li.innerHTML = `
                 <div>
-                    <div style="font-weight: 500;">${item.name}</div>
-                    <div style="font-size: 0.75rem; opacity: 0.7;">${item.qty} x ${state.formatter.format(item.price)}</div>
+                    <div style="font-weight: 600;">${a.name}</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8;">${a.qty} x ${state.formatter.format(a.price)}</div>
                 </div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <span style="font-weight:600; color:var(--accent-gold);">${state.formatter.format(item.total)}</span>
-                    <button type="button" class="btn-remove" onclick="removeActivity(${item.id})"><i class="fas fa-trash"></i></button>
-                </div>
-            `;
-            activityList.appendChild(li);
+                <span style="font-weight:600;">
+                    ${state.formatter.format(a.total)} 
+                    <button type="button" class="btn-remove" onclick="removeExtra(${a.id})"><i class="fas fa-times"></i></button>
+                </span>`;
+            extraList.appendChild(li);
         });
-        const totalSemua = BASE_MENU_TOTAL + additionalTotal;
-        grandTotalEl.textContent = state.formatter.format(totalSemua);
-        updateHiddenInput();
+        grandTotalEl.textContent = state.formatter.format(BASE_TOTAL + extraTotal);
+        activitiesInput.value = JSON.stringify([...menuDataDB, ...state.extras]);
     }
 
-    function updateHiddenInput() {
-        const combined = [...menuDataFromDB, ...state.activities];
-        activitiesDataInput.value = JSON.stringify(combined);
+    function toggleModal(show) {
+        modal.classList.toggle('active', show);
     }
 
-    // 1. Validasi Form saat tombol utama diklik
     form.addEventListener("submit", (e) => {
-        if(!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
         e.preventDefault();
-        confirmModal.classList.add("active"); // Munculin modal konfirmasi
+        toggleModal(true);
     });
 
-    // 2. Tombol Cancel di Modal
-    btnCancel.addEventListener("click", () => {
-        btnCancel.classList.add("selected");
-        setTimeout(() => {
-            confirmModal.classList.remove("active");
-            btnCancel.classList.remove("selected");
-        }, 200);
-    });
-
-    // 3. Tombol YES di Modal (Proses ke Midtrans)
-    btnFinal.addEventListener("click", async () => {
-        btnFinal.classList.add("selected");
-        confirmModal.classList.remove("active");
-        loadingScreen.style.display = "flex";
+    document.getElementById("btnFinalSubmit").addEventListener("click", async () => {
+        toggleModal(false);
+        loading.style.display = "flex";
 
         const formData = new FormData(form);
-        if(occasionSelect.value === 'others') {
-            formData.set('occasion', otherOccasionInput.value);
-        }
+        const paymentMethod = formData.get('payment_method');
 
         try {
             const response = await fetch(STORE_URL, {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                    'Accept': 'application/json'
-                }
+                headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}", 'Accept': 'application/json' }
             });
-            
             const res = await response.json();
-            
-            // Matikan loading setelah dapet response dari server
-            loadingScreen.style.display = "none"; 
 
-            if(res.success && res.snap_token) {
-                // MENGAKTIFKAN POPUP MIDTRANS
-                window.snap.pay(res.snap_token, {
-                    onSuccess: function(result) {
-                        window.location.href = res.redirect_url;
-                    },
-                    onPending: function(result) {
-                        window.location.href = res.redirect_url;
-                    },
-                    onError: function(result) {
-                        alert("Pembayaran Gagal!");
-                        btnFinal.classList.remove("selected");
-                    },
-                    onClose: function() {
-                        alert('Anda menutup jendela pembayaran.');
-                        btnFinal.classList.remove("selected");
-                    }
-                });
+            if (res.success) {
+                if (paymentMethod === 'midtrans' && res.snap_token) {
+                    loading.style.display = "none";
+                    window.snap.pay(res.snap_token, {
+                        onSuccess: (r) => window.location.href = res.redirect_url,
+                        onPending: (r) => window.location.href = res.redirect_url,
+                        onClose: () => {
+                            loading.style.display = "none";
+                            alert("Payment Window Closed");
+                        }
+                    });
+                } else {
+                    window.location.href = res.redirect_url;
+                }
             } else {
-                btnFinal.classList.remove("selected");
-                alert("Gagal: " + JSON.stringify(res.errors || res.message));
+                throw new Error(res.message || "Failed to process");
             }
         } catch (e) {
-            loadingScreen.style.display = "none";
-            btnFinal.classList.remove("selected");
-            alert("Terjadi kesalahan sistem atau koneksi.");
-            console.error(e);
+            loading.style.display = "none";
+            alert("Error: " + e.message);
         }
     });
+
+    // Initial value for hidden input
+    activitiesInput.value = JSON.stringify(menuDataDB);
 </script>
+
 </body>
 </html>
