@@ -40,8 +40,8 @@
     <nav class="bg-[#2c4c58] p-4 flex justify-between items-center text-[#c2a978] shadow-md px-10">
         <h1 class="text-xl tracking-widest uppercase font-serif">Live Kitchen</h1>
         <div class="flex items-center gap-6 text-sm font-semibold">
-            <a href="#" class="hover:text-white transition">DASHBOARD</a>
-            <a href="{{ route('manajemen.menu') }}" class="hover:text-white transition">MENU</a>
+            {{-- <a href="#" class="hover:text-white transition">DASHBOARD</a> --}}
+            {{-- <a href="{{ route('manajemen.menu') }}" class="hover:text-white transition">MENU</a> --}}
             <a href="#" class="hover:text-white transition">PESANAN</a>
             <a href="{{ route('admin.messages') }}" class="hover:text-white transition">View Messages</a>
             <form action="{{ route('logout') }}" method="POST" class="inline">
