@@ -19,15 +19,9 @@ class CartIndex extends Component
 
     public function removeItem($id)
     {
-        // Filter array untuk menghapus item
         $this->cart = array_filter($this->cart, fn($item) => $item['id'] !== $id);
-
-        // Reset index array agar tetap berurutan
         $this->cart = array_values($this->cart);
-
-        // Update session agar data yang dihapus tersimpan
         session()->put('cart', $this->cart);
-
         $this->curateTotal();
     }
 
@@ -38,7 +32,6 @@ class CartIndex extends Component
                 $item['qty']++;
             }
         }
-
         session()->put('cart', $this->cart);
         $this->curateTotal();
     }
@@ -50,7 +43,6 @@ class CartIndex extends Component
                 $item['qty']--;
             }
         }
-
         session()->put('cart', $this->cart);
         $this->curateTotal();
     }
@@ -63,12 +55,22 @@ class CartIndex extends Component
     public function checkout()
     {
         if (empty($this->cart)) {
-            session()->flash('error', 'Keranjang Anda masih kosong.');
             return;
         }
 
-        // Simpan data cart final ke session untuk halaman reservasi
-        session(['cart_items' => $this->cart, 'grand_total' => $this->total]);
+        // 1. CEK APAKAH USER SUDAH LOGIN
+        if (!auth()->check()) {
+            // Jika belum login, kirim sinyal ke AlpineJS di Blade untuk buka modal
+            // Pastikan nama event 'open-auth-modal' sama dengan yang ada di x-on di Blade
+            $this->dispatch('open-auth-modal');
+            return;
+        }
+
+        // 2. JIKA SUDAH LOGIN, SIMPAN DATA KE SESSION & TERBANG KE RESERVASI
+        session([
+            'cart_items' => $this->cart, 
+            'grand_total' => $this->total
+        ]);
 
         return redirect()->route('reservation.index');
     }

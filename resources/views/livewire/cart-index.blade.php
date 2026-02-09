@@ -1,4 +1,10 @@
-<div x-data="{ showModal: false }" class="flex flex-col h-screen bg-[#D1DCE8] overflow-hidden selection:bg-[#D4B57F] selection:text-white">
+<div x-data="{ 
+    showAuthModal: false, 
+    isLoggedIn: @json(auth()->check()) 
+}" 
+x-on:open-auth-modal.window="showAuthModal = true"
+class="flex flex-col h-screen bg-[#D1DCE8] overflow-hidden selection:bg-[#D4B57F] selection:text-white">
+    
     <div class="flex flex-none h-14 items-stretch shadow-lg border-b border-[#D4B57F]/10">
         <a href="/" class="relative bg-[#5B788E] text-[#D4B57F] flex items-center px-8 font-serif text-sm tracking-[0.3em] uppercase z-20 hover:bg-[#4A6375] transition-all duration-500">
             Home
@@ -26,12 +32,12 @@
 
                     <div class="w-32 h-24 bg-[#DBE2E9] rounded-sm flex-none overflow-hidden relative shadow-inner">
                          <div class="absolute inset-0 bg-[#345061]/5 group-hover:bg-transparent transition-colors z-10"></div>
-                           @if(!empty($item['image']))
-        <img src="{{ $item['image'] }}"
-             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-             alt="{{ $item['name'] }}"
-             onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif\'>Culinary<br>Masterpiece</div>'">
-    @else
+                         @if(!empty($item['image']))
+                            <img src="{{ $item['image'] }}"
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                 alt="{{ $item['name'] }}"
+                                 onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif\'>Culinary<br>Masterpiece</div>'">
+                         @else
                             <div class="w-full h-full flex items-center justify-center bg-[#345061]/10 text-[#345061]/30 text-[8px] uppercase tracking-widest text-center p-2 font-serif">
                                 Image Not<br>Curated
                             </div>
@@ -90,7 +96,7 @@
                 <span class="text-3xl font-light italic">{{ count($cart) }} Items</span>
             </div>
 
-            <button @click="showModal = true" class="w-full md:w-1/2 bg-[#D4B57F] text-[#2A4557] py-5 uppercase tracking-[0.5em] font-bold text-[11px] shadow-xl hover:bg-white transition-all duration-500 active:scale-95">
+            <button wire:click="checkout" class="w-full md:w-1/2 bg-[#D4B57F] text-[#2A4557] py-5 uppercase tracking-[0.5em] font-bold text-[11px] shadow-xl hover:bg-white transition-all duration-500 active:scale-95">
                 Proceed to Reservation
             </button>
 
@@ -102,26 +108,34 @@
     </div>
     @endif
 
-    <div x-show="showModal"
+    <div x-show="showAuthModal"
          x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
          x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 z-[60] flex items-center justify-center bg-[#2A4557]/90 backdrop-blur-md p-4"
          x-cloak>
+        <div @click.away="showAuthModal = false" class="bg-[#345061] p-10 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md w-full text-center font-serif border border-[#D4B57F]/30 relative">
+            <div class="absolute top-4 left-4 right-4 bottom-4 border border-[#D4B57F]/10 pointer-events-none"></div>
+            
+            <h3 class="text-[#D4B57F] text-3xl mb-2 italic font-light tracking-wide">Guest Recognition</h3>
+            <div class="w-12 h-[1px] bg-[#D4B57F]/50 mx-auto mb-6"></div>
+            
+            <p class="text-white/80 text-[11px] mb-10 uppercase tracking-[0.3em] leading-loose">
+                To preserve your culinary selection and proceed to reservation, please identify yourself.
+            </p>
 
-        <div @click.away="showModal = false" class="bg-white p-8 rounded-sm shadow-2xl max-w-sm w-full text-center font-serif border border-[#D4B57F]/20">
-            <h3 class="text-[#345061] text-2xl mb-4 italic font-light">Finalize Selection?</h3>
-            <p class="text-gray-500 text-[10px] mb-8 uppercase tracking-[0.2em] leading-relaxed">You are about to be redirected to our reservation sanctuary.</p>
-
-            <div class="flex gap-4">
-                <button @click="showModal = false" class="flex-1 py-3 border border-gray-200 text-gray-400 uppercase tracking-widest text-[9px] hover:bg-gray-50 transition-all">
-                    Return
-                </button>
-                <button wire:click="checkout" class="flex-1 py-3 bg-[#345061] text-[#D4B57F] uppercase tracking-widest text-[9px] font-bold hover:bg-[#2A4557] transition-all">
-                    Confirm
+            <div class="flex flex-col gap-4 relative z-10">
+                <a href="/register" class="py-4 bg-[#D4B57F] text-[#2A4557] uppercase tracking-[0.4em] text-[10px] font-bold hover:bg-white transition-all duration-500">
+                    Create New Profile
+                </a>
+                <a href="{{ route('login') }}" class="py-4 border border-[#D4B57F] text-[#D4B57F] uppercase tracking-[0.4em] text-[10px] hover:bg-[#D4B57F]/10 transition-all duration-500">
+                    Sign In to Account
+                </a>
+                <button @click="showAuthModal = false" class="mt-4 text-white/40 uppercase tracking-[0.2em] text-[8px] hover:text-white transition-all">
+                    Dismiss
                 </button>
             </div>
         </div>

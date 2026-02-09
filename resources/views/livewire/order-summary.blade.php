@@ -31,19 +31,14 @@
                 @forelse($items as $item)
                 <div class="bg-white/10 text-[#f1e4bc] p-4 flex gap-4 rounded-sm border border-[#f1e4bc]/10 shadow-lg items-center">
                     
-                    {{-- FUNGSI TAMPIL GAMBAR --}}
-                    <div class="w-14 h-14 bg-[#1a3a4a] rounded-sm flex-shrink-0 overflow-hidden border border-[#f1e4bc]/30">
-                        @php
-                            // Mengambil link image dari Seeder
-                            $imgUrl = $item['image'] ?? null;
-                        @endphp
-
-                        @if($imgUrl)
-                            <img src="{{ $imgUrl }}" 
+                    {{-- BAGIAN GAMBAR (Ganti dari Icon ke Gambar Asli) --}}
+                    <div class="w-14 h-14 bg-[#1a3a4a] rounded-sm flex-shrink-0 overflow-hidden border border-[#f1e4bc]/30 shadow-inner">
+                        @if(!empty($item['image']))
+                            <img src="{{ str_starts_with($item['image'], 'http') ? $item['image'] : asset('images/' . $item['image']) }}" 
                                  class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-500"
-                                 onerror="this.src='https://placehold.co/100x100?text=No+Image'">
+                                 alt="{{ $item['name'] }}">
                         @else
-                            <div class="w-full h-full flex items-center justify-center bg-white/5">
+                            <div class="w-full h-full flex items-center justify-center bg-[#f1e4bc]/5">
                                 <i class="fas fa-utensils opacity-20"></i>
                             </div>
                         @endif
@@ -52,12 +47,12 @@
                     <div class="flex-1 min-w-0">
                         <p class="font-bold text-sm uppercase tracking-wide truncate">{{ $item['name'] ?? 'Item' }}</p>
                         <div class="flex justify-between text-[11px] mt-1 opacity-80">
-                            <span>Qty: {{ $item['qty'] ?? 1 }}</span>
+                            <span>Qty: {{ $item['qty'] ?? $item['quantity'] ?? 1 }}</span>
                             <span>@ Rp {{ number_format($item['price'] ?? 0, 0, ',', '.') }}</span>
                         </div>
                     </div>
-                    <div class="self-center font-bold text-sm text-right min-w-[100px]">
-                        Rp {{ number_format(($item['qty'] ?? 1) * ($item['price'] ?? 0), 0, ',', '.') }}
+                    <div class="font-bold text-sm text-right min-w-[90px]">
+                        Rp {{ number_format(($item['qty'] ?? $item['quantity'] ?? 1) * ($item['price'] ?? 0), 0, ',', '.') }}
                     </div>
                 </div>
                 @empty
@@ -68,13 +63,23 @@
 
         {{-- Ringkasan Biaya --}}
         <div class="bg-white/5 p-4 rounded-sm border border-white/10 space-y-3 text-sm">
+            <div class="flex justify-between text-xs opacity-70">
+                <span>Total Items:</span> <span>{{ $totalVolume ?? 0 }} Units</span>
+            </div>
             <div class="flex justify-between">
                 <span>Subtotal:</span> <span class="font-bold">Rp {{ number_format($subtotal ?? 0, 0, ',', '.') }}</span>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-[#f1e4bc]/20">
+            <div class="flex justify-between border-b border-[#f1e4bc]/20 pb-3 italic text-xs">
+                <span>Service Premium (5%):</span> <span>Rp {{ number_format($servicePremium ?? 0, 0, ',', '.') }}</span>
+            </div>
+            <div class="flex justify-between items-center pt-2">
                 <span class="text-lg font-bold uppercase">Total Due:</span>
                 <span class="text-xl font-bold border-b-2 border-[#f1e4bc]">Rp {{ number_format($totalBalance ?? 0, 0, ',', '.') }}</span>
             </div>
         </div>
+
+        <p class="text-[11px] text-center italic opacity-80 font-serif">
+            "Your reservation is now secured. Our team is preparing for your arrival."
+        </p>
     </div>
 </div>
