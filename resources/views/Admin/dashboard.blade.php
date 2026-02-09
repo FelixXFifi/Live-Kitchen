@@ -44,8 +44,8 @@
         <h1 class="text-xl tracking-widest uppercase font-serif">Live Kitchen</h1>
         <div class="flex items-center gap-6 text-sm font-semibold">
             
-            <a href="{{ route('admin.dashboard') }}" class="hover:text-white transition uppercase tracking-widest">Dashboard</a>
-            <a href="{{ route('manajemen.menu') }}" class="hover:text-white transition uppercase tracking-widest">Menu</a>
+            {{-- <a href="{{ route('admin.dashboard') }}" class="hover:text-white transition uppercase tracking-widest">Dashboard</a>
+            <a href="{{ route('manajemen.menu') }}" class="hover:text-white transition uppercase tracking-widest">Menu</a> --}}
             <a href="{{ route('admin.orders') }}" class="hover:text-white transition uppercase tracking-widest">Pesanan</a>
             <a href="{{ route('admin.messages') }}" class="hover:text-white transition">View Messages</a>
             <form action="{{ route('logout') }}" method="POST" class="inline">

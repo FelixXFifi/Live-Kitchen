@@ -71,6 +71,8 @@ Route::middleware([
     // Aliases
     Route::get('/new-creation', function () { return view('admin.new-creation-page'); })->name('new.creation');
     Route::get('/dashboard-default', function () { return view('dashboard'); })->name('dashboard');
+    Route::get('/admin/messages', [DashboardController::class, 'messages'])->name('admin.messages');
+    Route::delete('/admin/messages/{id}', [DashboardController::class, 'destroyMessage'])->name('admin.messages.destroy');
 });
 
 // =========================================================================
