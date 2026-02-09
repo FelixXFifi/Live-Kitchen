@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Preferences & Reservation Details</title>
+    <script type="text/javascript"
+      src="https://app.sandbox.midtrans.com/snap/snap.js"
+      data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
@@ -428,15 +431,17 @@
         activitiesDataInput.value = JSON.stringify(combined);
     }
 
+    // 1. Validasi Form saat tombol utama diklik
     form.addEventListener("submit", (e) => {
         if(!form.checkValidity()) {
             form.reportValidity();
             return;
         }
         e.preventDefault();
-        confirmModal.classList.add("active");
+        confirmModal.classList.add("active"); // Munculin modal konfirmasi
     });
 
+    // 2. Tombol Cancel di Modal
     btnCancel.addEventListener("click", () => {
         btnCancel.classList.add("selected");
         setTimeout(() => {
@@ -445,6 +450,7 @@
         }, 200);
     });
 
+    // 3. Tombol YES di Modal (Proses ke Midtrans)
     btnFinal.addEventListener("click", async () => {
         btnFinal.classList.add("selected");
         confirmModal.classList.remove("active");
@@ -464,20 +470,39 @@
                     'Accept': 'application/json'
                 }
             });
+            
             const res = await response.json();
-            setTimeout(() => {
-                if(res.success) {
-                    window.location.href = res.redirect_url;
-                } else {
-                    loadingScreen.style.display = "none";
-                    btnFinal.classList.remove("selected");
-                    alert("Error: " + JSON.stringify(res.errors || res.message));
-                }
-            }, 1500);
+            
+            // Matikan loading setelah dapet response dari server
+            loadingScreen.style.display = "none"; 
+
+            if(res.success && res.snap_token) {
+                // MENGAKTIFKAN POPUP MIDTRANS
+                window.snap.pay(res.snap_token, {
+                    onSuccess: function(result) {
+                        window.location.href = res.redirect_url;
+                    },
+                    onPending: function(result) {
+                        window.location.href = res.redirect_url;
+                    },
+                    onError: function(result) {
+                        alert("Pembayaran Gagal!");
+                        btnFinal.classList.remove("selected");
+                    },
+                    onClose: function() {
+                        alert('Anda menutup jendela pembayaran.');
+                        btnFinal.classList.remove("selected");
+                    }
+                });
+            } else {
+                btnFinal.classList.remove("selected");
+                alert("Gagal: " + JSON.stringify(res.errors || res.message));
+            }
         } catch (e) {
             loadingScreen.style.display = "none";
             btnFinal.classList.remove("selected");
-            alert("Connection failed. Please try again.");
+            alert("Terjadi kesalahan sistem atau koneksi.");
+            console.error(e);
         }
     });
 </script>
